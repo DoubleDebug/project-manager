@@ -1,1 +1,12 @@
-node_modules
+# compiled output
+/dist
+
+# dependencies
+/node_modules
+
+# IDE - VSCode
+.vscode/
+
+# System Files
+.DS_Store
+Thumbs.db
