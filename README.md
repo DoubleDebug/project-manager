@@ -2,15 +2,15 @@
  TypeScript web app for project management
 _______________________________________________________________
 
-* klase
+* klase ✓
 * Babel ✓
-* moduli
-* webpack ✓
+* moduli ✓
+* Webpack ✓
 * funkcionalno programiranje i rad sa nizovima
     * map
     * reduce
-    * filter
-    * forEach
+    * filter ✓
+    * forEach ✓
 * asinhrono programiranje
     * fetch
     * Promise
