@@ -6,8 +6,8 @@ export class Project {
     public model: ProjectModel;
     public view: ProjectView;
 
-    constructor(id: number, name: string, tasks: Task[], dueDate: Date) {
-        this.model = new ProjectModel(id, name, tasks, dueDate);
+    constructor(id: number, name: string, dueDate: Date) {
+        this.model = new ProjectModel(id, name, dueDate);
         this.view = new ProjectView();
     }
 

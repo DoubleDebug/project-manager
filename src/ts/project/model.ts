@@ -6,13 +6,10 @@ export class ProjectModel {
     private tasks: Task[];
     public dueDate: Date;
 
-    constructor(id: number, name: string, tasks: Task[], dueDate: Date) {
+    constructor(id: number, name: string, dueDate: Date) {
         this.id = id;
         this.name = name;
-        if (tasks === null)
-            this.tasks = [];
-        else
-            this.tasks = tasks;
+        this.tasks = [];
         this.dueDate = dueDate;
     }
 

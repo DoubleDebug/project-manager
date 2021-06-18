@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
-    "convert": "./node_modules/.bin/babel src --out-dir lib --extensions \".ts\""
+    "babel": "./node_modules/.bin/babel src --out-dir lib --extensions \".ts\"",
+    "json": "json-server --watch ./data/db.json"
   },
   "author": "DoubleDebug",
   "license": "ISC",
@@ -20,5 +21,8 @@
     "typescript": "^4.3.2",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.2"
+  },
+  "dependencies": {
+    "json-server": "^0.16.3"
   }
 }
