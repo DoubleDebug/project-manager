@@ -25,6 +25,10 @@ export class UserModel {
         return this.projects;
     }
 
+    setProjects(p: Project[]): void {
+        this.projects = p;
+    }
+
     getNumOfProjects(): number {
         return this.projects.length;
     }

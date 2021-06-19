@@ -12,8 +12,8 @@ _______________________________________________________________
     * filter ✓
     * forEach ✓
 * asinhrono programiranje
-    * fetch
-    * Promise
+    * fetch ✓
+    * Promise ✓
 * RxJS
     * switchMap
     * take

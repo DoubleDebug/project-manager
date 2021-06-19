@@ -1,18 +1,16 @@
+import * as $ from 'jquery';
 import { DatabaseAPI } from "./databaseAPI";
-import { Project } from "./project/controller";
-import { Task } from "./task/controller";
-import { TaskState } from "./taskState";
-import { User } from "./user/controller";
+import { Manager } from "./manager/controller";
 
-const container: HTMLElement = document.body;
 const dbURL = 'http://localhost:3000';
-
 DatabaseAPI.setRootURL(dbURL);
-DatabaseAPI.getAllUsers()
-.then(users => {
-    console.log(users);
-    // users.forEach((user: User) => {
-    //     console.log('user', user);
-    //     user.draw(container);
-    // });
+
+const manager: Manager = new Manager();
+manager.draw(document.body);
+manager.view.displayPopup({
+    color: 'green',
+    title: 'Does it work?',
+    message: 'It realy does work!'
 });
+
+(<any>$('.toast')).toast('show');

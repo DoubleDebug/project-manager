@@ -21,6 +21,10 @@ export class ProjectModel {
         return this.tasks;
     }
 
+    setTasks(t: Task[]): void {
+        this.tasks = t;
+    }
+
     addTask(t: Task): void {
         this.tasks.push(t);
     }
