@@ -1,93 +1,92 @@
-{    
-    "users": [
-        {
-            "id": 1,
-            "nickname": "DoubleDebug",
-            "password": "pswd123"
-        },        
-        {
-            "id": 2,
-            "nickname": "JohnSnow",
-            "password": "pswd321"
-        }
-    ],
-    "projects": [
-        {
-            "id": 1,
-            "name": "RWA",
-            "dueDate": "15.6.2021.",
-            "userId": 1
-        },
-        {
-            "id": 2,
-            "name": "SWE",
-            "dueDate": "15.6.2021.",
-            "userId": 1
-        },
-        
-        {
-            "id": 3,
-            "name": "InfoSys",
-            "dueDate": "1.7.2021.",
-            "userId": 2
-        }
-    ],
-    "tasks": [
-        {
-            "id": 1,
-            "name": "Babel",
-            "description": "Configure Babel",
-            "state": 0,
-            "projectId": 1
-        },
-        {
-            "id": 2,
-            "name": "Webpack",
-            "description": "Configure Webpack",
-            "state": 0,
-            "projectId": 1
-        },
-        {
-            "id": 3,
-            "name": "Classes",
-            "description": "Add classes",
-            "state": 0,
-            "projectId": 1
-        },        
-        {
-            "id": 4,
-            "name": "Documentation",
-            "description": "Write documentation",
-            "state": 2,
-            "projectId": 2
-        },
-        {
-            "id": 5,
-            "name": "Kod",
-            "description": "Write code",
-            "state": 0,
-            "projectId": 2
-        },
-        {
-            "id": 6,
-            "name": "JPA",
-            "description": "Java Persistence API",
-            "state": 2,
-            "projectId": 3
-        },
-        {
-            "id": 7,
-            "name": "EJB",
-            "description": "Business logic",
-            "state": 1,
-            "projectId": 3
-        },
-        {
-            "id": 8,
-            "name": "Docker",
-            "description": "Docker container depoloyment",
-            "state": 0,
-            "projectId": 3
-        }
-    ]
+{
+  "users": [
+    {
+      "id": 1,
+      "nickname": "DoubleDebug",
+      "password": "pswd123"
+    },
+    {
+      "id": 2,
+      "nickname": "JohnSnow",
+      "password": "pswd321"
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "RWA",
+      "dueDate": "15.6.2021.",
+      "userId": 1
+    },
+    {
+      "id": 2,
+      "name": "SWE",
+      "dueDate": "15.6.2021.",
+      "userId": 1
+    },
+    {
+      "id": 3,
+      "name": "InfoSys",
+      "dueDate": "1.7.2021.",
+      "userId": 2
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Babel",
+      "description": "Configure Babel",
+      "state": 0,
+      "projectId": 1
+    },
+    {
+      "id": 2,
+      "name": "Webpack",
+      "description": "Configure Webpack",
+      "state": 0,
+      "projectId": 1
+    },
+    {
+      "id": 3,
+      "name": "Classes",
+      "description": "Add classes",
+      "state": 0,
+      "projectId": 1
+    },
+    {
+      "id": 4,
+      "name": "Documentation",
+      "description": "Write documentation",
+      "state": 2,
+      "projectId": 2
+    },
+    {
+      "id": 5,
+      "name": "Kod",
+      "description": "Write code",
+      "state": 0,
+      "projectId": 2
+    },
+    {
+      "id": 6,
+      "name": "JPA",
+      "description": "Java Persistence API",
+      "state": 2,
+      "projectId": 3
+    },
+    {
+      "id": 7,
+      "name": "EJB",
+      "description": "Business logic",
+      "state": 1,
+      "projectId": 3
+    },
+    {
+      "id": 8,
+      "name": "Docker",
+      "description": "Docker container depoloyment",
+      "state": 0,
+      "projectId": 3
+    }
+  ]
 }

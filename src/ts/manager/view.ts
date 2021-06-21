@@ -13,12 +13,21 @@ export class ManagerView {
         this.parent = parent;
         this.parent.appendChild(this.container);
 
-        // draw start page logo
-        const logo = document.createElement('img');
-        logo.className = 'undrawLogo';
-        this.container.appendChild(logo);
+        // checking for saved user in cookies
+        if (model.getUserCookie() === -1)
+        {
+            // draw start page logo
+            const logo = document.createElement('img');
+            logo.className = 'undrawLogo';
+            this.container.appendChild(logo);
 
-        this.drawLoginPage(model);
+            // draw login page
+            this.drawLoginPage(model);
+        }
+        else
+        {
+            this.drawDashboard();
+        }
     }
 
     drawLoginPage(model: ManagerModel) {
@@ -40,6 +49,11 @@ export class ManagerView {
         btnSignUp.onclick = () => {
             btnContainer.classList.toggle('hide');
             signUpForm.classList.toggle('hide');
+
+            // focus on nickname input field after animation
+            setTimeout(() => {
+                document.getElementById('inputSignUpNickname').focus();
+            }, 1000);
         };
         btnContainer.appendChild(btnSignUp);
 
@@ -50,6 +64,11 @@ export class ManagerView {
         btnLogin.onclick = () => {
             btnContainer.classList.toggle('hide');
             loginForm.classList.toggle('hide');
+
+            // focus on nickname input field after animation
+            setTimeout(() => {
+                document.getElementById('inputLoginNickname').focus();
+            }, 1000);
         }
         btnContainer.appendChild(btnLogin);
         loginContainer.appendChild(btnContainer);
@@ -74,7 +93,13 @@ export class ManagerView {
             lblText: 'Sign up to Project Manager',
             btnText: 'Sign up',
             callbackFunction: () => {
+                // loading animation
+                const animation = document.createElement('div');
+                animation.className = 'spinner-border spinner-border-sm text-light';
+                document.getElementById('btnSignUpNow').innerHTML = animation.outerHTML;
 
+                // login
+                this.trySignUp(model, signUpForm);
             }
         });
 
@@ -104,7 +129,11 @@ export class ManagerView {
         inputPassword.placeholder = 'Password';
         inputPassword.addEventListener('keyup', (e) => {
             if (e.key === 'Enter')
+            {
+                e.preventDefault();
                 data.callbackFunction();
+                console.log('refreshed');
+            }
         });
         loginForm.appendChild(inputPassword);
 
@@ -112,7 +141,11 @@ export class ManagerView {
         btnLogin.id = `btn${data.formType}Now`;
         btnLogin.className = 'btn btn-success';
         btnLogin.innerHTML = data.btnText;
-        btnLogin.onclick = data.callbackFunction;
+        btnLogin.onclick = (e: Event) => {
+            e.preventDefault();
+            data.callbackFunction();
+            console.log('refreshed');
+        };
         loginForm.appendChild(btnLogin);
 
         const btnGoBack = document.createElement('button');
@@ -144,6 +177,13 @@ export class ManagerView {
 
                 // draw dashboard
                 this.drawDashboard();
+
+                // display success message
+                this.displayPopup({
+                    color: 'green',
+                    title: 'Login successful',
+                    message: 'Welcome back to the Project Manager!'
+                });
             }
             else
                 errorMsg += loginMsg;
@@ -170,8 +210,8 @@ export class ManagerView {
     }
 
     async trySignUp(model: ManagerModel, loginForm: HTMLElement) {
-        const nn = (document.getElementById('inputLoginNickname') as HTMLInputElement).value;
-        const pswd = (document.getElementById('inputLoginPassword') as HTMLInputElement).value;
+        const nn = (document.getElementById('inputSignUpNickname') as HTMLInputElement).value;
+        const pswd = (document.getElementById('inputSignUpPassword') as HTMLInputElement).value;
         let errorMsg: string = 'Sign up failed: ';
         let signupMsg = '';
         if (model.validateInputData(nn, pswd))
@@ -185,6 +225,13 @@ export class ManagerView {
 
                 // draw dashboard
                 this.drawDashboard();
+
+                // display success message
+                this.displayPopup({
+                    color: 'green',
+                    title: 'Sign up successful',
+                    message: 'Welcome to the Project Manager!'
+                });
             }
             else
                 errorMsg += signupMsg;
@@ -205,9 +252,9 @@ export class ManagerView {
         }
 
         // remove animation
-        const loginBtn = document.getElementById('btnLoginNow');
-        if (loginBtn != null)
-            loginBtn.innerHTML = 'Log in';
+        const signupBtn = document.getElementById('btnSignUpNow');
+        if (signupBtn != null)
+            signupBtn.innerHTML = 'Sign up';
     }
 
     drawDashboard() {
@@ -218,8 +265,18 @@ export class ManagerView {
      * @param data requires COLOR, TITLE and MESSAGE property
      */
     displayPopup(data: any) {
+        var toast = document.getElementById('toastNotif');
+        if (toast === null) {
+            toast = this.createPopup(data);
+        }
+
+        (<any>$('#toastNotif')).toast('show');
+    }
+
+    createPopup(data: any) {
         const toast = document.createElement('div');
         toast.className = 'toast';
+        toast.id = 'toastNotif';
 
         const toastHeader = document.createElement('div');
         toastHeader.className = 'toast-header';
@@ -254,5 +311,7 @@ export class ManagerView {
 
         toast.appendChild(body);
         document.body.appendChild(toast);
+        (<any>$('#toastNotif')).toast({delay: 3000});
+        return toast;
     }
 }

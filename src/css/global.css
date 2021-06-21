@@ -22,14 +22,18 @@ label {
     text-align: center;
 }
 
+img {
+    border: 0;
+}
+
+button, input {
+    min-height: 38px;
+}
+
 .btn {
     margin-top: 5px;
     margin-bottom: 5px;
     height: 38px;
-}
-
-img {
-    border: 0;
 }
 
 .btn.btn-light {
@@ -45,6 +49,7 @@ img {
 
 .toast {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 20px;
+    right: 20px;
+    min-width: 400px;
 }

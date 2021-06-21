@@ -62,7 +62,7 @@ export class DatabaseAPI {
         return fetch(`${DatabaseAPI.rootURL}/users/${id}`)
         .then(data => data.json())
         .then(userData => {
-            if (userData.length == 0)
+            if (userData.length === undefined || userData.length === 0)
                 return null;
                 
             return DatabaseAPI.convertUserFromDbToMvc(userData).pop();
@@ -73,7 +73,7 @@ export class DatabaseAPI {
         return fetch(`${DatabaseAPI.rootURL}/users?nickname=${nickname}`)
         .then(data => data.json())
         .then(userData => {
-            if (userData.length == 0)
+            if (userData.length === undefined || userData.length === 0)
                 return null;
 
             return DatabaseAPI.convertUserFromDbToMvc(userData).pop();

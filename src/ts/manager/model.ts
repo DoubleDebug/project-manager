@@ -6,15 +6,15 @@ export class ManagerModel {
 
     constructor() {
         const currentUserId = this.getUserCookie();
-
-        if (currentUserId === '')
+        if (currentUserId === -1)
             this.currentUser = null;
         else {
-            DatabaseAPI.getUserById(Number(currentUserId)).then((user: User) => {
-                this.currentUser = user;
-                console.log(user);
-            });
+            DatabaseAPI.getUserById(Number(currentUserId)).then(user => this.currentUser = user);
         }
+    }
+
+    getCurrentUser(): User {
+        return this.currentUser;
     }
 
     setUserCookie(id: number) {
@@ -27,19 +27,24 @@ export class ManagerModel {
         document.cookie = `userId=${id}; expires=${expires}; path=/;`;
     }
 
-    getUserCookie() {
+    /**
+     * @returns user's id stored in cookies (or -1 if there's no cookie)
+     */
+    getUserCookie(): number {
         var name = 'userId=';
         var decodedCookie = decodeURIComponent(document.cookie);
         var cookieArray = decodedCookie.split(';');
-        cookieArray.forEach(cookie => {
+        for (var i=0; i<cookieArray.length; i++) {
+            var cookie = cookieArray[i];
             while (cookie.charAt(0) == ' ') {
-              cookie = cookie.substring(1);
-            }
+                cookie = cookie.substring(1);
+              }
+
             if (cookie.indexOf(name) == 0) {
-              return cookie.substring(name.length, cookie.length);
+                return Number(cookie.substring(name.length, cookie.length));
             }
-        });
-        return '';
+        }        
+        return -1;
     }
 
     /**
@@ -52,6 +57,12 @@ export class ManagerModel {
      */
     validateInputData(nickname: string, password: string): boolean {
         if (nickname === '' || password === '')
+            return false;
+
+        if (nickname.length < 4 || nickname.length > 15)
+            return false;
+
+        if (password.length < 4 || password.length > 15)
             return false;
 
         const matchesRegex = /^[a-zA-Z0-9_\.]+$/.exec(nickname);
@@ -69,6 +80,7 @@ export class ManagerModel {
         if (user.model.getPassword() !== password)
             return 'wrong password';
 
+        // save current user in cookies
         this.currentUser = user;
         this.setUserCookie(this.currentUser.model.getId());
         return 'success';
@@ -78,8 +90,17 @@ export class ManagerModel {
      * @returns a sign up result message ('success' if login successful)
      */
     async trySignUpUser(nickname: string, password: string): Promise<string> {
+        const userWithSameNickname = await DatabaseAPI.getUserByNickname(nickname);
+        if (userWithSameNickname !== null)
+            return 'nickname already taken';
+
         const response = await DatabaseAPI.addUser(nickname, password);
-        console.log(response);
-        return '';
+        if (!response.ok)
+            return 'fetch error';
+
+        // save current user in cookies
+        this.currentUser = await DatabaseAPI.getUserByNickname(nickname);
+        this.setUserCookie(this.currentUser.model.getId());
+        return 'success';
     }
 }
