@@ -61,19 +61,14 @@ export class DatabaseAPI {
     static async getUserById(id: number): Promise<User> {
         return fetch(`${DatabaseAPI.rootURL}/users/${id}`)
         .then(data => data.json())
-        .then(userData => {
-            if (userData.length === undefined || userData.length === 0)
-                return null;
-                
-            return DatabaseAPI.convertUserFromDbToMvc(userData).pop();
-        });
+        .then(userData => DatabaseAPI.convertUserFromDbToMvc([userData]).pop());
     }
 
     static async getUserByNickname(nickname: string): Promise<User> {
         return fetch(`${DatabaseAPI.rootURL}/users?nickname=${nickname}`)
         .then(data => data.json())
         .then(userData => {
-            if (userData.length === undefined || userData.length === 0)
+            if (userData.length === 0)
                 return null;
 
             return DatabaseAPI.convertUserFromDbToMvc(userData).pop();
@@ -81,16 +76,14 @@ export class DatabaseAPI {
     }
 
     static async addUser(nickname: string, password: string) {
-        return fetch(`${DatabaseAPI.rootURL}/users`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
+        return $.ajax({
+            url : `${DatabaseAPI.rootURL}/users`,
+            type: 'POST',
+            data: {
                 nickname: nickname,
                 password: password
-            })
+            },
+            async: true
         });
     }
 
@@ -103,7 +96,7 @@ export class DatabaseAPI {
     }
     
     static async getProjectsByUser(userId: number): Promise<Project[]> {
-        return fetch(`${DatabaseAPI.rootURL}/user/${userId}/projects`)
+        return fetch(`${DatabaseAPI.rootURL}/users/${userId}/projects`)
         .then(data => data.json())
         .then((projectData: any) => DatabaseAPI.convertProjectFromDbToMvc(projectData));
     }

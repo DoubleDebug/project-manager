@@ -1,0 +1,25 @@
+.profileHeader {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+}
+
+.headerMenu {
+    border: 1px solid red;
+    height: 60px;
+    width: 20%;
+}
+
+.headerTitle {
+    font-family: var(--titleFont);
+    font-size: 2em;
+    flex-grow: 1;
+    text-align: left;
+    padding-left: 15px;
+}
+
+.iconColor {
+    color: white;
+}

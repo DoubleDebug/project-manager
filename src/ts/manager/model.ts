@@ -3,13 +3,13 @@ import { User } from "../user/controller";
 
 export class ManagerModel {
     private currentUser: User;
-
-    constructor() {
+    
+    async setCurrentUser() {
         const currentUserId = this.getUserCookie();
         if (currentUserId === -1)
             this.currentUser = null;
         else {
-            DatabaseAPI.getUserById(Number(currentUserId)).then(user => this.currentUser = user);
+            await DatabaseAPI.getUserById(Number(currentUserId)).then(user => this.currentUser = user);
         }
     }
 
@@ -94,13 +94,15 @@ export class ManagerModel {
         if (userWithSameNickname !== null)
             return 'nickname already taken';
 
-        const response = await DatabaseAPI.addUser(nickname, password);
-        if (!response.ok)
-            return 'fetch error';
+        const newUser = await DatabaseAPI.addUser(nickname, password);
 
         // save current user in cookies
-        this.currentUser = await DatabaseAPI.getUserByNickname(nickname);
+        this.currentUser = await DatabaseAPI.getUserById(newUser.id);
         this.setUserCookie(this.currentUser.model.getId());
         return 'success';
+    }
+
+    logoutUser() {
+        document.cookie = 'userId=;expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=127.0.0.1; path="/"';
     }
 }

@@ -1,3 +1,4 @@
+import { User } from "../user/controller";
 import { ManagerModel } from "./model";
 
 export class ManagerView {
@@ -26,8 +27,63 @@ export class ManagerView {
         }
         else
         {
+            this.drawProfileHeader(model);
             this.drawDashboard();
         }
+    }
+
+    /**
+     * @param data requires COLOR, TITLE and MESSAGE property
+     */
+    displayPopup(data: any) {
+        var toast = document.getElementById('toastNotif');
+        if (toast === null) {
+            toast = this.createPopup(data);
+        }
+
+        (<any>$('#toastNotif')).toast('show');
+    }
+
+    createPopup(data: any) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.id = 'toastNotif';
+
+        const toastHeader = document.createElement('div');
+        toastHeader.className = 'toast-header';
+
+        const statusIcon = document.createElement('div');
+        statusIcon.className = 'statusIcon';
+        statusIcon.style.backgroundColor = data.color;
+        toastHeader.appendChild(statusIcon);
+
+        const lblHeader = document.createElement('strong');
+        lblHeader.className = 'mr-auto';
+        lblHeader.innerHTML = data.title;
+        toastHeader.appendChild(lblHeader);
+
+        const time = document.createElement('small');
+        toastHeader.appendChild(time);
+
+        const btnClose = document.createElement('button');
+        btnClose.type = 'button';
+        btnClose.className = 'ml-2 mb-1 close';
+        toastHeader.appendChild(btnClose);
+
+        const span = document.createElement('span');
+        span.innerHTML = '&times;'
+        btnClose.appendChild(span);
+
+        toast.appendChild(toastHeader);
+
+        const body = document.createElement('div');
+        body.className = 'toast-body';
+        body.innerHTML = data.message;
+
+        toast.appendChild(body);
+        document.body.appendChild(toast);
+        (<any>$('#toastNotif')).toast({delay: 3000});
+        return toast;
     }
 
     drawLoginPage(model: ManagerModel) {
@@ -130,7 +186,6 @@ export class ManagerView {
         inputPassword.addEventListener('keyup', (e) => {
             if (e.key === 'Enter')
             {
-                e.preventDefault();
                 data.callbackFunction();
                 console.log('refreshed');
             }
@@ -141,8 +196,7 @@ export class ManagerView {
         btnLogin.id = `btn${data.formType}Now`;
         btnLogin.className = 'btn btn-success';
         btnLogin.innerHTML = data.btnText;
-        btnLogin.onclick = (e: Event) => {
-            e.preventDefault();
+        btnLogin.onclick = (e) => {
             data.callbackFunction();
             console.log('refreshed');
         };
@@ -176,6 +230,7 @@ export class ManagerView {
                 document.getElementsByClassName('loginContainer')[0].remove();
 
                 // draw dashboard
+                this.drawProfileHeader(model);
                 this.drawDashboard();
 
                 // display success message
@@ -224,6 +279,7 @@ export class ManagerView {
                 document.getElementsByClassName('loginContainer')[0].remove();
 
                 // draw dashboard
+                this.drawProfileHeader(model);
                 this.drawDashboard();
 
                 // display success message
@@ -257,61 +313,51 @@ export class ManagerView {
             signupBtn.innerHTML = 'Sign up';
     }
 
+    drawProfileHeader(model: ManagerModel) {
+        const header = document.createElement('div');
+        header.className = 'profileHeader';
+        this.container.appendChild(header);
+
+        const title = document.createElement('label');
+        title.className = 'headerTitle';
+        title.innerHTML = 'Project Manager';
+        header.appendChild(title);
+
+        const menu = document.createElement('div');
+        menu.className = 'headerMenu';
+        header.appendChild(menu);
+
+        const dropdown = document.createElement('div');
+        dropdown.className = 'dropdown';
+        menu.appendChild(dropdown);
+
+        const dropdownMenu = document.createElement('div');
+        dropdownMenu.className = 'dropdown-menu';
+        (<any>dropdownMenu)['aria-labelledby'] = 'dropdownMenuButton';
+
+        const user: User = model.getCurrentUser();
+        const nicknameItem = document.createElement('div');
+        nicknameItem.className = 'dropdown-item';
+        nicknameItem.innerHTML = `#${user.model.getId()} | ${user.model.nickname} (${user.model.getNumOfProjects()})`;
+        dropdownMenu.appendChild(nicknameItem);
+
+        const btnLogout = document.createElement('a');
+        btnLogout.className = 'dropdown-item';
+        btnLogout.innerHTML = 'Log out';
+        btnLogout.onclick = () => model.logoutUser();
+        dropdownMenu.appendChild(btnLogout);
+
+        const btnProfile = document.createElement('button');
+        dropdown.appendChild(btnProfile);
+        let btnHtml = '<button class="btn btn-secondary dropdown-toggle" type="button" ';
+        btnHtml += 'id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" ';
+        btnHtml += 'aria-expanded="false"><i class="fas fa-user iconColor"></i></button>';
+        btnProfile.outerHTML = btnHtml;
+        
+        dropdown.appendChild(dropdownMenu);
+    }
+
     drawDashboard() {
 
-    }
-
-    /**
-     * @param data requires COLOR, TITLE and MESSAGE property
-     */
-    displayPopup(data: any) {
-        var toast = document.getElementById('toastNotif');
-        if (toast === null) {
-            toast = this.createPopup(data);
-        }
-
-        (<any>$('#toastNotif')).toast('show');
-    }
-
-    createPopup(data: any) {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.id = 'toastNotif';
-
-        const toastHeader = document.createElement('div');
-        toastHeader.className = 'toast-header';
-
-        const statusIcon = document.createElement('div');
-        statusIcon.className = 'statusIcon';
-        statusIcon.style.backgroundColor = data.color;
-        toastHeader.appendChild(statusIcon);
-
-        const lblHeader = document.createElement('strong');
-        lblHeader.className = 'mr-auto';
-        lblHeader.innerHTML = data.title;
-        toastHeader.appendChild(lblHeader);
-
-        const time = document.createElement('small');
-        toastHeader.appendChild(time);
-
-        const btnClose = document.createElement('button');
-        btnClose.type = 'button';
-        btnClose.className = 'ml-2 mb-1 close';
-        toastHeader.appendChild(btnClose);
-
-        const span = document.createElement('span');
-        span.innerHTML = '&times;'
-        btnClose.appendChild(span);
-
-        toast.appendChild(toastHeader);
-
-        const body = document.createElement('div');
-        body.className = 'toast-body';
-        body.innerHTML = data.message;
-
-        toast.appendChild(body);
-        document.body.appendChild(toast);
-        (<any>$('#toastNotif')).toast({delay: 3000});
-        return toast;
     }
 }
