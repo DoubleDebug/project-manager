@@ -11,14 +11,6 @@ export class User {
         this.view = new UserView();
     }
 
-    addProject(p: Project): void {
-        this.model.addProject(p);
-    }
-
-    removeProject(id: number): void {
-        this.model.removeProject(id);
-    }
-
     draw(parent: HTMLElement): void {
         this.view.draw(parent, this.model);
     }

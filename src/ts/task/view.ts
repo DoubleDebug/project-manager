@@ -15,7 +15,7 @@ export class TaskView {
         const lblName = document.createElement('label');
         lblName.innerHTML = `Name: ${model.name}<br>
                              Description: ${model.description}<br>
-                             State: ${model.getState().toString()}`;
+                             State: ${model.getState()}`;
         this.container.appendChild(lblName);
         this.parent.appendChild(this.container);
     }

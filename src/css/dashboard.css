@@ -7,9 +7,8 @@
 }
 
 .headerMenu {
-    border: 1px solid red;
-    height: 60px;
-    width: 20%;
+    height: 100%;
+    padding-top: 5px;
 }
 
 .headerTitle {
@@ -21,5 +20,25 @@
 }
 
 .iconColor {
-    color: white;
+    color: black;
+}
+
+.dropdown {
+    display: flex;
+}
+
+#btnAddProject {
+    flex-grow: 1;
+    width: 150px;
+    margin-right: 10px;
+}
+
+#dropdownMenuButton {
+    flex-direction: column;
+    align-self: flex-end;
+    margin-right: 10px;
+}
+
+.dropdown-menu {
+    cursor: pointer;
 }

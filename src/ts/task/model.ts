@@ -17,7 +17,7 @@ export class TaskModel {
         return this.id;
     }
 
-    getState(): TaskState {
-        return this.state;
+    getState(): string {
+        return TaskState[this.state];
     }
 }

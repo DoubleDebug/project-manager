@@ -4,12 +4,12 @@ import { User } from "../user/controller";
 export class ManagerModel {
     private currentUser: User;
     
-    async setCurrentUser() {
+    async loadLoggedInUser() {
         const currentUserId = this.getUserCookie();
         if (currentUserId === -1)
             this.currentUser = null;
         else {
-            await DatabaseAPI.getUserById(Number(currentUserId)).then(user => this.currentUser = user);
+            this.currentUser = await DatabaseAPI.getUserById(Number(currentUserId));
         }
     }
 
@@ -103,6 +103,7 @@ export class ManagerModel {
     }
 
     logoutUser() {
-        document.cookie = 'userId=;expires=Thu, 01 Jan 1970 00:00:01 GMT; domain=127.0.0.1; path="/"';
+        document.cookie = 'userId=;expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
+        location.reload();
     }
 }

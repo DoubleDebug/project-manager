@@ -22,31 +22,31 @@ export class DatabaseAPI {
         return tasks;
     }
 
-    static convertProjectFromDbToMvc(projData: any): Project[] {
+    static async convertProjectFromDbToMvc(projData: any): Promise<Project[]> {
         if (projData.length == 0)
             return null;
 
-        const projects: Project[] = [];            
-        projData.forEach((proj: any) => {
+        const projects: Project[] = [];
+        for (let proj of projData) {
             const newProject = new Project(proj.id, proj.name, proj.dueDate);
-            DatabaseAPI.getTasksByProject(proj.id)
+            await DatabaseAPI.getTasksByProject(proj.id)
             .then(tasks => newProject.model.setTasks(tasks));
             projects.push(newProject);
-        });
+        }
         return projects;
     }
 
-    static convertUserFromDbToMvc(userData: any): User[] {
+    static async convertUserFromDbToMvc(userData: any): Promise<User[]> {
         if (userData.length == 0)
             return null;
 
         const users: User[] = [];
-        userData.forEach((user: any) => {
+        for (let user of userData) {
             const newUser = new User(user.id, user.nickname, user.password);
-            DatabaseAPI.getProjectsByUser(user.id)
+            await DatabaseAPI.getProjectsByUser(user.id)
             .then(projects => newUser.model.setProjects(projects));
             users.push(newUser);
-        });
+        }
         return users;
     }
 
@@ -55,23 +55,23 @@ export class DatabaseAPI {
     static async getAllUsers(): Promise<User[]> {
         return fetch(`${DatabaseAPI.rootURL}/users`)
         .then(data => data.json())
-        .then(userData => DatabaseAPI.convertUserFromDbToMvc(userData));
+        .then(async (userData) => await DatabaseAPI.convertUserFromDbToMvc(userData));
     }
 
     static async getUserById(id: number): Promise<User> {
         return fetch(`${DatabaseAPI.rootURL}/users/${id}`)
         .then(data => data.json())
-        .then(userData => DatabaseAPI.convertUserFromDbToMvc([userData]).pop());
+        .then(async (userData) => (await DatabaseAPI.convertUserFromDbToMvc([userData])).pop());
     }
 
     static async getUserByNickname(nickname: string): Promise<User> {
         return fetch(`${DatabaseAPI.rootURL}/users?nickname=${nickname}`)
         .then(data => data.json())
-        .then(userData => {
+        .then(async (userData) => {
             if (userData.length === 0)
                 return null;
 
-            return DatabaseAPI.convertUserFromDbToMvc(userData).pop();
+            return (await DatabaseAPI.convertUserFromDbToMvc(userData)).pop();
         });
     }
 
@@ -92,13 +92,13 @@ export class DatabaseAPI {
     static async getAllProjects(): Promise<Project[]> {
         return fetch(`${DatabaseAPI.rootURL}/projects`)
         .then(data => data.json())
-        .then((projectData: any) => DatabaseAPI.convertProjectFromDbToMvc(projectData));
+        .then(async (projectData: any) => await DatabaseAPI.convertProjectFromDbToMvc(projectData));
     }
     
     static async getProjectsByUser(userId: number): Promise<Project[]> {
         return fetch(`${DatabaseAPI.rootURL}/users/${userId}/projects`)
         .then(data => data.json())
-        .then((projectData: any) => DatabaseAPI.convertProjectFromDbToMvc(projectData));
+        .then(async (projectData: any) => await DatabaseAPI.convertProjectFromDbToMvc(projectData));
     }
 
     // TASK table methods

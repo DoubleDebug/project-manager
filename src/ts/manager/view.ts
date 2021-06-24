@@ -1,3 +1,4 @@
+import { Project } from "../project/controller";
 import { User } from "../user/controller";
 import { ManagerModel } from "./model";
 
@@ -28,7 +29,7 @@ export class ManagerView {
         else
         {
             this.drawProfileHeader(model);
-            this.drawDashboard();
+            this.drawDashboard(model);
         }
     }
 
@@ -231,7 +232,7 @@ export class ManagerView {
 
                 // draw dashboard
                 this.drawProfileHeader(model);
-                this.drawDashboard();
+                this.drawDashboard(model);
 
                 // display success message
                 this.displayPopup({
@@ -280,7 +281,7 @@ export class ManagerView {
 
                 // draw dashboard
                 this.drawProfileHeader(model);
-                this.drawDashboard();
+                this.drawDashboard(model);
 
                 // display success message
                 this.displayPopup({
@@ -331,6 +332,14 @@ export class ManagerView {
         dropdown.className = 'dropdown';
         menu.appendChild(dropdown);
 
+        const btnAddProject = document.createElement('button');
+        btnAddProject.className = 'btn btn-success';
+        btnAddProject.id = 'btnAddProject';
+        const plusIcon = document.createElement('i');
+        plusIcon.className = 'fas fa-plus';
+        btnAddProject.appendChild(plusIcon);
+        dropdown.appendChild(btnAddProject);
+
         const dropdownMenu = document.createElement('div');
         dropdownMenu.className = 'dropdown-menu';
         (<any>dropdownMenu)['aria-labelledby'] = 'dropdownMenuButton';
@@ -338,7 +347,7 @@ export class ManagerView {
         const user: User = model.getCurrentUser();
         const nicknameItem = document.createElement('div');
         nicknameItem.className = 'dropdown-item';
-        nicknameItem.innerHTML = `#${user.model.getId()} | ${user.model.nickname} (${user.model.getNumOfProjects()})`;
+        nicknameItem.innerHTML = `#${user.model.getId()} | ${user.model.nickname}`;
         dropdownMenu.appendChild(nicknameItem);
 
         const btnLogout = document.createElement('a');
@@ -349,7 +358,7 @@ export class ManagerView {
 
         const btnProfile = document.createElement('button');
         dropdown.appendChild(btnProfile);
-        let btnHtml = '<button class="btn btn-secondary dropdown-toggle" type="button" ';
+        let btnHtml = '<button class="btn btn-light dropdown-toggle" type="button" ';
         btnHtml += 'id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" ';
         btnHtml += 'aria-expanded="false"><i class="fas fa-user iconColor"></i></button>';
         btnProfile.outerHTML = btnHtml;
@@ -357,7 +366,9 @@ export class ManagerView {
         dropdown.appendChild(dropdownMenu);
     }
 
-    drawDashboard() {
-
+    drawDashboard(model: ManagerModel) {
+        const projects = model.getCurrentUser().model.getProjects();
+        
+        projects.forEach((proj: Project) => proj.draw(this.container));
     }
 }

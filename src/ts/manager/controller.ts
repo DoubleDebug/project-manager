@@ -11,7 +11,7 @@ export class Manager {
     }
 
     draw(parent: HTMLElement) {
-        this.model.setCurrentUser().then(() => {
+        this.model.loadLoggedInUser().then(() => {
             this.view.draw(parent, this.model);
         });
     }
