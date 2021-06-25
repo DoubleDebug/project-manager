@@ -106,4 +106,11 @@ export class ManagerModel {
         document.cookie = 'userId=;expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
         location.reload();
     }
+
+    static shortenString(s: string, length: number): string {
+        if (s.length <= length)
+            return s;
+        
+        return s.substr(0, length - 3) + '...';
+    }
 }

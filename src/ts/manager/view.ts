@@ -319,6 +319,7 @@ export class ManagerView {
         header.className = 'profileHeader';
         this.container.appendChild(header);
 
+        // Project Manager label (top left)
         const title = document.createElement('label');
         title.className = 'headerTitle';
         title.innerHTML = 'Project Manager';
@@ -328,47 +329,125 @@ export class ManagerView {
         menu.className = 'headerMenu';
         header.appendChild(menu);
 
-        const dropdown = document.createElement('div');
-        dropdown.className = 'dropdown';
-        menu.appendChild(dropdown);
-
+        // Add project button
         const btnAddProject = document.createElement('button');
-        btnAddProject.className = 'btn btn-success';
+        btnAddProject.className = 'btn btn-success menuButton';
         btnAddProject.id = 'btnAddProject';
         const plusIcon = document.createElement('i');
         plusIcon.className = 'fas fa-plus';
         btnAddProject.appendChild(plusIcon);
-        dropdown.appendChild(btnAddProject);
+        menu.appendChild(btnAddProject);
+
+        // Dropdown buttons
+        this.drawSortingDropdown(menu, model);
+        this.drawProfileDropdown(menu, model);
+    }
+
+    drawDropdownButton(parent: HTMLElement, btnId: string, items: HTMLElement[]): HTMLElement {
+        const dropdown = document.createElement('div');
+        dropdown.className = 'dropdown';
+        parent.appendChild(dropdown);
 
         const dropdownMenu = document.createElement('div');
-        dropdownMenu.className = 'dropdown-menu';
-        (<any>dropdownMenu)['aria-labelledby'] = 'dropdownMenuButton';
-
-        const user: User = model.getCurrentUser();
-        const nicknameItem = document.createElement('div');
-        nicknameItem.className = 'dropdown-item';
-        nicknameItem.innerHTML = `#${user.model.getId()} | ${user.model.nickname}`;
-        dropdownMenu.appendChild(nicknameItem);
-
-        const btnLogout = document.createElement('a');
-        btnLogout.className = 'dropdown-item';
-        btnLogout.innerHTML = 'Log out';
-        btnLogout.onclick = () => model.logoutUser();
-        dropdownMenu.appendChild(btnLogout);
-
-        const btnProfile = document.createElement('button');
-        dropdown.appendChild(btnProfile);
-        let btnHtml = '<button class="btn btn-light dropdown-toggle" type="button" ';
-        btnHtml += 'id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" ';
-        btnHtml += 'aria-expanded="false"><i class="fas fa-user iconColor"></i></button>';
-        btnProfile.outerHTML = btnHtml;
-        
+        dropdownMenu.className = 'dropdown-menu dropdown-menu-right';
+        (<any>dropdownMenu)['aria-labelledby'] = btnId;
         dropdown.appendChild(dropdownMenu);
+
+        items.forEach(item => dropdownMenu.appendChild(item));
+
+        return dropdown;
     }
 
     drawDashboard(model: ManagerModel) {
         const projects = model.getCurrentUser().model.getProjects();
         
-        projects.forEach((proj: Project) => proj.draw(this.container));
+        let dashboard = <HTMLElement>document.getElementsByClassName('dashboard')[0];
+        if (!dashboard)
+            dashboard = document.createElement('div');
+        dashboard.className = 'dashboard';
+        projects.forEach((proj: Project) => proj.drawPreview(dashboard));
+
+        this.container.appendChild(dashboard);        
+    }    
+
+    drawProfileDropdown(parent: HTMLElement, model: ManagerModel) {
+        // User dropdown menu
+        let dropdownItems = [];
+
+        // User nickname
+        const user: User = model.getCurrentUser();
+        const nicknameItem = document.createElement('button');
+        nicknameItem.disabled = true;
+        nicknameItem.className = 'dropdown-item';
+        nicknameItem.innerHTML = `#${user.model.getId()} | ${user.model.nickname}`;
+        dropdownItems.push(nicknameItem);
+
+        // Logout button
+        const btnLogout = document.createElement('a');
+        btnLogout.className = 'dropdown-item';
+        btnLogout.innerHTML = 'Log out';
+        btnLogout.onclick = () => model.logoutUser();
+        dropdownItems.push(btnLogout);
+
+        const dropdown = this.drawDropdownButton(parent, 'btnProfileDropdown', dropdownItems);
+        const btnProfile = document.createElement('button');
+        dropdown.appendChild(btnProfile);
+        let btnHtml = '<button class="btn btn-light dropdown-toggle menuButton" type="button" ';
+        btnHtml += 'id="btnProfileDropdown" data-toggle="dropdown" aria-haspopup="true" ';
+        btnHtml += 'aria-expanded="false"><i class="fas fa-user iconColor"></i></button>';
+        btnProfile.outerHTML = btnHtml;
+    }
+
+    drawSortingDropdown(parent: HTMLDivElement, model: ManagerModel) {
+        // Sorting dropdown
+        let dropdownItems: HTMLAnchorElement[] = [];
+
+        // Sort by date added
+        const btnSortDateAdded = document.createElement('a');
+        btnSortDateAdded.className = 'dropdown-item';
+        btnSortDateAdded.innerHTML = 'Date added ✓';
+        btnSortDateAdded.onclick = () => this.changeSortingMethod('getTimestamp', btnSortDateAdded, dropdownItems, model, true);
+        dropdownItems.push(btnSortDateAdded);
+
+        // Sort by urgency
+        const btnSortUrgency = document.createElement('a');
+        btnSortUrgency.className = 'dropdown-item';
+        btnSortUrgency.innerHTML = 'Urgency';
+        btnSortUrgency.onclick = () => this.changeSortingMethod('getDueDate', btnSortUrgency, dropdownItems, model);
+        dropdownItems.push(btnSortUrgency);
+
+        // Sort by number of tasks
+        const btnSortTasks = document.createElement('a');
+        btnSortTasks.className = 'dropdown-item';
+        btnSortTasks.innerHTML = 'Number of tasks';
+        btnSortTasks.onclick = () => this.changeSortingMethod('getNumOfTasks', btnSortTasks, dropdownItems, model);
+        dropdownItems.push(btnSortTasks);
+        
+        const dropdown = this.drawDropdownButton(parent, 'btnSortDropdown', dropdownItems);
+        const btnSortBy = document.createElement('button');
+        dropdown.appendChild(btnSortBy);
+        let btnHtml = '<button class="btn btn-light dropdown-toggle menuButton" type="button" ';
+        btnHtml += 'id="btnSortDropdown" data-toggle="dropdown" aria-haspopup="true" ';
+        btnHtml += 'aria-expanded="false">Sort by</button>';
+        btnSortBy.outerHTML = btnHtml;
+    }
+
+    changeSortingMethod(method: 'getTimestamp' | 'getDueDate' | 'getNumOfTasks', sortingButtonEl: HTMLAnchorElement, dropdownArray: HTMLAnchorElement[], model: ManagerModel, reverseOperators: boolean = false) {
+        // make this sorting method active
+        dropdownArray.map(el => el.innerHTML = el.innerHTML.replace(' ✓', ''));
+        sortingButtonEl.innerHTML += ' ✓';
+
+        // apply sorting method
+        model.getCurrentUser().model.sortProjects(method, reverseOperators);
+
+        // redraw dashboard
+        const dashboard = document.getElementsByClassName('dashboard')[0];
+        this.removeElementsChildren(dashboard);
+        this.drawDashboard(model);
+    }
+
+    removeElementsChildren(element: Element) {
+        while (element.children[0])
+            element.removeChild(element.children[0]);
     }
 }

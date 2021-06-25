@@ -1,14 +1,26 @@
+.dashboard {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-content: center;
+    width: 100%;
+    margin: 100px 0 100px 0;
+}
+
 .profileHeader {
-    position: fixed;
-    top: 0;
     width: 100%;
     height: 60px;
     display: flex;
+    padding: 15px 10px 0 0;
 }
 
 .headerMenu {
-    height: 100%;
+    display: flex;
     padding-top: 5px;
+}
+
+.headerMenu > * {    
+    height: min-content;
 }
 
 .headerTitle {
@@ -23,20 +35,17 @@
     color: black;
 }
 
+.menuButton {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 .dropdown {
     display: flex;
 }
 
 #btnAddProject {
-    flex-grow: 1;
     width: 150px;
-    margin-right: 10px;
-}
-
-#dropdownMenuButton {
-    flex-direction: column;
-    align-self: flex-end;
-    margin-right: 10px;
 }
 
 .dropdown-menu {

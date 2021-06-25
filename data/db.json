@@ -15,19 +15,36 @@
     {
       "id": 1,
       "name": "RWA",
-      "dueDate": "15.6.2021.",
+      "dueDate": "6-26-2021",
+      "timestamp": "6-1-2021",
       "userId": 1
     },
     {
       "id": 2,
       "name": "SWE",
-      "dueDate": "15.6.2021.",
+      "dueDate": "7-20-2021",
+      "timestamp": "6-2-2021",
       "userId": 1
     },
     {
       "id": 3,
+      "name": "Digitalna elektronika",
+      "dueDate": "9-15-2021",
+      "timestamp": "6-3-2021",
+      "userId": 1
+    },
+    {
+      "id": 4,
+      "name": "Objektno orijentisano programiranje",
+      "dueDate": "9-01-2021",
+      "timestamp": "6-4-2021",
+      "userId": 1
+    },
+    {
+      "id": 5,
       "name": "InfoSys",
-      "dueDate": "1.7.2021.",
+      "dueDate": "8-1-2021",
+      "timestamp": "6-5-2021",
       "userId": 2
     }
   ],
@@ -72,21 +89,21 @@
       "name": "JPA",
       "description": "Java Persistence API",
       "state": 2,
-      "projectId": 3
+      "projectId": 4
     },
     {
       "id": 7,
       "name": "EJB",
       "description": "Business logic",
       "state": 1,
-      "projectId": 3
+      "projectId": 4
     },
     {
       "id": 8,
       "name": "Docker",
       "description": "Docker container depoloyment",
-      "state": 0,
-      "projectId": 3
+      "state": 2,
+      "projectId": 4
     }
   ]
 }

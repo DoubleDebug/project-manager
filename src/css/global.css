@@ -9,6 +9,12 @@
 
 html, body {
     margin: 0;
+    overflow-x: hidden;
+}
+
+/* Remove scrollbar */
+::-webkit-scrollbar {
+    width: 0;
 }
 
 input {
@@ -30,12 +36,6 @@ button, input {
     min-height: 38px;
 }
 
-.btn {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    height: 38px;
-}
-
 .btn.btn-light {
     border: 1px solid var(--dirtyWhiteColor);
 }
@@ -52,4 +52,12 @@ button, input {
     bottom: 20px;
     right: 20px;
     min-width: 400px;
+}
+
+.manager {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background: linear-gradient(#473585 0vh, #311F6F 33vh, #11053D 66vh, #090122 100vh);
+    background-attachment: scroll;
 }

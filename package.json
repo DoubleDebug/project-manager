@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "jquery": "^3.6.0",
-    "json-server": "^0.16.3"
+    "json-server": "^0.16.3",
+    "time-left-ago": "^2.0.2"
   }
 }

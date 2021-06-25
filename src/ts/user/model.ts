@@ -25,7 +25,7 @@ export class UserModel {
         return this.projects;
     }
 
-    setProjects(p: Project[]): void {
+    setProjects(p: Project[]) {
         this.projects = p;
     }
 
@@ -33,11 +33,22 @@ export class UserModel {
         return this.projects.length;
     }
 
-    addProject(p: Project): void {
+    addProject(p: Project) {
         this.projects.push(p);
     }
 
-    removeProject(id: number): void {
+    removeProject(id: number) {
         this.projects = this.projects.filter((p: Project) => p.model.getId() !== id);
+    }
+
+    sortProjects(criteria: 'getTimestamp' | 'getDueDate' | 'getNumOfTasks', reverseOperators: boolean = false) {
+        this.projects.sort((a: Project, b: Project): number => {
+            if (a.model[criteria]() < b.model.getDueDate())
+                return (reverseOperators ? 1 : -1);
+            else if (a.model.getDueDate() > b.model.getDueDate())
+                return (reverseOperators ? -1 : 1);
+
+            return 0;
+        })
     }
 }

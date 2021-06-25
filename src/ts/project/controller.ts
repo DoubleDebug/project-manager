@@ -6,8 +6,8 @@ export class Project {
     public model: ProjectModel;
     public view: ProjectView;
 
-    constructor(id: number, name: string, dueDate: Date) {
-        this.model = new ProjectModel(id, name, dueDate);
+    constructor(id: number, name: string, dueDate: Date, timestamp: Date) {
+        this.model = new ProjectModel(id, name, dueDate, timestamp);
         this.view = new ProjectView();
     }
 
@@ -15,11 +15,7 @@ export class Project {
         this.view.draw(parent, this.model);
     }
 
-    addTask(t: Task): void {
-        this.model.addTask(t);
-    }
-
-    removeTask(id: number): void {
-        this.model.removeTask(id);
+    drawPreview(parent: HTMLElement) {
+        this.view.drawPreview(parent, this.model);
     }
 }

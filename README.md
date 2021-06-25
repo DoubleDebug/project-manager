@@ -7,8 +7,8 @@ _______________________________________________________________
 * moduli ✓
 * Webpack ✓
 * funkcionalno programiranje i rad sa nizovima
-    * map
-    * reduce
+    * map ✓
+    * reduce ✓
     * filter ✓
     * forEach ✓
 * asinhrono programiranje

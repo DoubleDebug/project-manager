@@ -28,7 +28,7 @@ export class DatabaseAPI {
 
         const projects: Project[] = [];
         for (let proj of projData) {
-            const newProject = new Project(proj.id, proj.name, proj.dueDate);
+            const newProject = new Project(proj.id, proj.name, proj.dueDate, proj.timestamp);
             await DatabaseAPI.getTasksByProject(proj.id)
             .then(tasks => newProject.model.setTasks(tasks));
             projects.push(newProject);

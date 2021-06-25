@@ -29,15 +29,6 @@
     transition: var(--standardTransition);
 }
 
-.manager {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    background: linear-gradient(#473585 0vh, #311F6F 33vh, #11053D 66vh, #090122 100vh);
-}
-
 #btnLogin, #btnSignUp {
     margin: 5px;
     width: 15%;
