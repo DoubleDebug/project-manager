@@ -1,4 +1,6 @@
 import { Project } from "../project/controller";
+import { Task } from "../task/controller";
+import { TaskState } from "../taskState";
 
 export class UserModel {
     private id: number;
@@ -50,5 +52,17 @@ export class UserModel {
 
             return 0;
         })
+    }
+
+    markAllAsFinished() {
+        this.projects.map((proj: Project) => {
+            proj.model.getTasks().map((task: Task) => {
+                task.model.setState(TaskState.Finished);
+            });
+        });
+    }
+
+    deleteAllProjects() {
+        this.projects = [];
     }
 }
