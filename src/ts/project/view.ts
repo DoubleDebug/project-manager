@@ -1,66 +1,67 @@
 import { timeLeft } from 'time-left-ago';
 import { ManagerModel } from '../manager/model';
-import { ProjectModel } from "./model";
+import { TaskState } from '../taskState';
+import { ProjectModel } from './model';
 
 export class ProjectView {
-    private container: HTMLElement;
-    private parent: HTMLElement;
+  private container: HTMLElement;
+  private parent: HTMLElement;
 
-    constructor() {
-        this.container = document.createElement('div');
-        this.container.className = 'project';
-    }
-    
-    draw(parent: HTMLElement, model: ProjectModel) {
-        this.parent = parent;
+  constructor() {
+    this.container = document.createElement('div');
+    this.container.className = 'project';
+  }
 
-        const lblTitle = document.createElement('label');
-        lblTitle.innerHTML = `#${model.getId()} | ${model.name}<br>`;
-        this.container.appendChild(lblTitle);
+  draw(parent: HTMLElement, model: ProjectModel) {
+    this.parent = parent;
 
-        model.getTasks().forEach(task => task.draw(this.container));
+    const lblTitle = document.createElement('label');
+    lblTitle.innerHTML = `#${model.getId()} | ${model.name}<br>`;
+    this.container.appendChild(lblTitle);
 
-        this.parent.appendChild(this.container);
-    }
+    model.getTasks().forEach((task) => task.draw(this.container));
 
-    drawPreview(parent: HTMLElement, model: ProjectModel) {
-        const card = document.createElement('div');
-        card.className = 'card project';
-        parent.appendChild(card);
+    this.parent.appendChild(this.container);
+  }
 
-        const image = document.createElement('img');
-        const randImageNumber = Math.ceil(Math.random() * 3);
-        image.className = `card-img-top cardImage cardImage${randImageNumber}`;
-        card.appendChild(image);
+  drawPreview(parent: HTMLElement, model: ProjectModel) {
+    const card = document.createElement('div');
+    card.className = 'card project';
+    parent.appendChild(card);
 
-        const body = document.createElement('div');
-        body.className = 'card-body';
-        card.appendChild(body);
-        
-        const title = document.createElement('h5');
-        title.className = 'card-title';
-        title.innerHTML = ManagerModel.shortenString(model.name, 12);
-        body.appendChild(title);
+    const image = document.createElement('img');
+    const randImageNumber = Math.ceil(Math.random() * 6);
+    image.className = `card-img-top cardImage cardImage${randImageNumber}`;
+    card.appendChild(image);
 
-        const percentage = model.getPercentageDone();
-        const percentageLabel = document.createElement('h1');
-        percentageLabel.className = 'lblProjectPercentage';
-        percentageLabel.innerHTML = `${percentage}%`;
-        body.appendChild(percentageLabel);
+    const body = document.createElement('div');
+    body.className = 'card-body';
+    card.appendChild(body);
 
-        const timeLeft = model.getTimeRemaining();
-        const dueOnLabel = document.createElement('p');
-        dueOnLabel.className = 'card-text lblTimeLeft';
-        dueOnLabel.innerHTML = timeLeft;
-        body.appendChild(dueOnLabel);
+    const title = document.createElement('h5');
+    title.className = 'card-title';
+    title.innerHTML = ManagerModel.shortenString(model.name, 12);
+    body.appendChild(title);
 
-        const progress = document.createElement('div');
-        progress.className = 'progress';
-        body.appendChild(progress);
+    const percentage = model.getPercentageDone();
+    const percentageLabel = document.createElement('h1');
+    percentageLabel.className = 'lblProjectPercentage';
+    percentageLabel.innerHTML = `${percentage}%`;
+    body.appendChild(percentageLabel);
 
-        const progressBar = document.createElement('div');
-        progressBar.className = `progress-bar`;
-        progressBar.style.width = `${percentage}%`;
-        progress.appendChild(progressBar);
-    }
+    const timeLeft = model.getTimeRemaining();
+    const dueOnLabel = document.createElement('p');
+    dueOnLabel.className = 'card-text lblTimeLeft';
+    dueOnLabel.innerHTML = `• ${timeLeft}</br>• ${model.getNumOfTasksInState(TaskState.FINISHED)}/${model.getNumOfTasks()} tasks finished`;
+    body.appendChild(dueOnLabel);
+
+    const progress = document.createElement('div');
+    progress.className = 'progress';
+    body.appendChild(progress);
+
+    const progressBar = document.createElement('div');
+    progressBar.className = `progress-bar`;
+    progressBar.style.width = `${percentage}%`;
+    progress.appendChild(progressBar);
+  }
 }

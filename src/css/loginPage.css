@@ -7,6 +7,7 @@
 
 .loginContainer {
   display: flex;
+  height: 100vh;
   align-self: center;
   justify-content: center;
   flex-direction: column;
@@ -27,7 +28,6 @@
 .btnContainer.hide {
   height: 0px;
   opacity: 0%;
-  transition: var(--standardTransition);
 }
 
 #btnLogin,
@@ -39,6 +39,7 @@
 .loginForm {
   display: flex;
   flex-direction: column;
+  height: 288px;
   padding: 10px 25% 10px 25%;
   overflow: hidden;
   opacity: 100%;
@@ -48,16 +49,15 @@
 .loginForm.hide {
   height: 0px;
   opacity: 0%;
-  transition: var(--standardTransition);
 }
 
 #lblLogin {
   margin: 10px 0 10px 0;
 }
 
-.undrawLogo {
-  content: url('../../res/startPageLogo.svg');
+.imgStartPage {
+  content: url('../../res/projectCard6.svg');
   align-self: center;
-  width: 300px;
-  aspect-ratio: 532 / 389;
+  width: 320px;
+  aspect-ratio: 505 / 596;
 }

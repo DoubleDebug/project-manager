@@ -7,6 +7,9 @@
 # IDE - VSCode
 .vscode/
 
+# Database temp files
+/data/db1.json
+
 # System Files
 .DS_Store
 Thumbs.db

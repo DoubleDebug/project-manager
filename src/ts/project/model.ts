@@ -1,6 +1,6 @@
-import { timeAgoFormatted, timeLeft } from "time-left-ago";
-import { Task } from "../task/controller";
-import { TaskState } from "../taskState";
+import { timeAgoFormatted, timeLeft } from 'time-left-ago';
+import { Task } from '../task/controller';
+import { TaskState } from '../taskState';
 
 export class ProjectModel {
     private id: number;
@@ -51,27 +51,61 @@ export class ProjectModel {
     }
 
     getPercentageDone(): number {
-        if (this.tasks.length === 0) return 0;
+        if (this.tasks.length === 0)
+            return 0;
 
         const numOfTasks = this.tasks.length;
-        const numOfFinishedTasks = this.tasks.reduce((acc: number, curr: Task): number => {
-            if (curr.model.getState() === TaskState.Finished)
+        const numOfFinishedTasks = this.getNumOfTasksInState(TaskState.FINISHED);
+        const numOfInProgressTasks = this.getNumOfTasksInState(TaskState.IN_PROGRESS);
+
+        return Math.round(((numOfFinishedTasks + numOfInProgressTasks / 2) / numOfTasks) * 100);
+    }
+
+    getNumOfTasksInState(state: TaskState): number {
+        return this.tasks.reduce((acc: number, curr: Task): number => {
+            if (curr.model.getState() === state)
                 acc += 1;
             return acc;
         }, 0);
-
-        return Math.round(numOfFinishedTasks / numOfTasks * 100);
     }
 
     getTimeRemaining(): string {
-        if (this.getDueDate() < (new Date()))
-        {
+        if (this.getDueDate() < new Date()) {
             const timeAgo = timeAgoFormatted(this.dueDate.toString());
             return timeAgo.toLowerCase() + ' ago';
-        }
-        else if (this.getDueDate() > (new Date()))
+        } else if (this.getDueDate() > new Date())
             return timeLeft(this.getDueDate(), 1);
 
         return 'Today';
+    }
+
+    getProjectState(): TaskState {
+        const numOfTasks = this.getNumOfTasks();
+        if (numOfTasks === 0) return TaskState.TO_DO;
+
+        let result = TaskState.TO_DO;
+        for (let i = 0; i < numOfTasks; i++) {
+            const currentTaskState = this.tasks[i].model.getState();
+            if (currentTaskState === TaskState.IN_PROGRESS
+                || (result === TaskState.FINISHED && currentTaskState === TaskState.TO_DO)) {
+                result = TaskState.IN_PROGRESS;
+                break;
+            }
+
+            if (currentTaskState === TaskState.FINISHED) {
+                result = TaskState.FINISHED;
+            }
+        }
+        return result;
+
+        // const numOfToDoTasks = this.getNumOfTasksInState(TaskState.TO_DO);
+        // const numOfInProgressTasks = this.getNumOfTasksInState(TaskState.IN_PROGRESS);
+        // const numOfFinishedTasks = this.getNumOfTasksInState(TaskState.FINISHED);
+
+        // if (numOfToDoTasks === numOfTasks) return TaskState.TO_DO;
+        // if (numOfInProgressTasks > 0) return TaskState.IN_PROGRESS;
+        // if (numOfFinishedTasks === numOfTasks) return TaskState.FINISHED;
+
+        // return TaskState.IN_PROGRESS;
     }
 }

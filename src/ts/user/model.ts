@@ -45,9 +45,9 @@ export class UserModel {
 
     sortProjects(criteria: 'getTimestamp' | 'getDueDate' | 'getNumOfTasks', reverseOperators: boolean = false) {
         this.projects.sort((a: Project, b: Project): number => {
-            if (a.model[criteria]() < b.model.getDueDate())
+            if (a.model[criteria]() < b.model[criteria]())
                 return (reverseOperators ? 1 : -1);
-            else if (a.model.getDueDate() > b.model.getDueDate())
+            else if (a.model[criteria]() > b.model[criteria]())
                 return (reverseOperators ? -1 : 1);
 
             return 0;
@@ -57,7 +57,7 @@ export class UserModel {
     markAllAsFinished() {
         this.projects.map((proj: Project) => {
             proj.model.getTasks().map((task: Task) => {
-                task.model.setState(TaskState.Finished);
+                task.model.setState(TaskState.FINISHED);
             });
         });
     }

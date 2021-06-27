@@ -1,5 +1,6 @@
 import { DatabaseAPI } from '../databaseAPI';
 import { Project } from '../project/controller';
+import { TaskState } from '../taskState';
 import { User } from '../user/controller';
 import { ManagerModel } from './model';
 
@@ -16,147 +17,22 @@ export class ManagerView {
     this.parent = parent;
     this.parent.appendChild(this.container);
 
-    // checking for saved user in cookies
-    if (model.getUserCookie() === -1) {
-      // draw start page logo
-      const logo = document.createElement('img');
-      logo.className = 'undrawLogo';
-      this.container.appendChild(logo);
-
-      // draw login page
+    // check for saved user in cookies
+    if (model.getUserCookie() === -1)
       this.drawLoginPage(model);
-    } else {
+    else {
       this.drawProfileHeader(model);
-      this.drawDashboard(model);
+      this.drawDashboard(model.getCurrentUser().model.getProjects());
     }
-  }
-
-  /**
-   * @param data requires COLOR, TITLE and MESSAGE property
-   */
-  static displayPopup(data: any) {
-    var toast = document.getElementById('toastNotif');
-    if (toast !== null) toast.remove();
-    toast = ManagerView.createPopup(data);
-    document.body.appendChild(toast);
-
-    (<any>$('#toastNotif')).toast('show');
-  }
-
-  private static createPopup(data: any) {
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.id = 'toastNotif';
-
-    const toastHeader = document.createElement('div');
-    toastHeader.className = 'toast-header';
-
-    const statusIcon = document.createElement('div');
-    statusIcon.className = 'statusIcon';
-    statusIcon.style.backgroundColor = data.color;
-    toastHeader.appendChild(statusIcon);
-
-    const lblHeader = document.createElement('strong');
-    lblHeader.className = 'mr-auto';
-    lblHeader.innerHTML = data.title;
-    toastHeader.appendChild(lblHeader);
-
-    const time = document.createElement('small');
-    toastHeader.appendChild(time);
-
-    const btnClose = document.createElement('button');
-    btnClose.type = 'button';
-    btnClose.className = 'ml-2 mb-1 close';
-    toastHeader.appendChild(btnClose);
-
-    const span = document.createElement('span');
-    span.innerHTML = '&times;';
-    btnClose.appendChild(span);
-
-    toast.appendChild(toastHeader);
-
-    const body = document.createElement('div');
-    body.className = 'toast-body';
-    body.innerHTML = data.message;
-
-    toast.appendChild(body);
-    (<any>$('#toastNotif')).toast({ delay: 3000 });
-    return toast;
-  }
-
-  /**
-   * @param data requires COLOR, TITLE, MESSAGE and BUTTONS property.
-   * Each button requires TEXT, TYPE (class name) and CALLBACK FUNCTION.
-   */
-  static displayModal(data: any) {
-    let modal = document.getElementById('modalDialog');
-    if (modal !== null) modal.remove();
-    modal = ManagerView.createModal(data);
-    document.body.appendChild(modal);
-
-    (<any>$('#modalDialog')).modal('show');
-  }
-
-  private static createModal(data: any) {
-    const modal = document.createElement('div');
-    modal.id = 'modalDialog';
-    modal.className = 'modal';
-    modal.tabIndex = -1;
-
-    const dialog = document.createElement('div');
-    dialog.className = 'modal-dialog modal-dialog-centered';
-
-    const content = document.createElement('div');
-    content.className = 'modal-content';
-
-    const header = document.createElement('div');
-    header.className = 'modal-header';
-
-    const statusIcon = document.createElement('div');
-    statusIcon.className = 'statusIcon';
-    statusIcon.style.backgroundColor = data.color;
-    header.appendChild(statusIcon);
-
-    const title = document.createElement('h5');
-    title.className = 'modal-title';
-    title.innerHTML = data.title;
-    header.appendChild(title);
-
-    const btnClose = document.createElement('button');
-    header.appendChild(btnClose);
-    let btnHtml = '<button class="close" ';
-    btnHtml += 'data-dismiss="modal"><span>&times;</span></button>';
-    btnClose.outerHTML = btnHtml;
-    content.appendChild(header);
-
-    const body = document.createElement('div');
-    body.className = 'modal-body';
-
-    const paragraph = document.createElement('p');
-    paragraph.innerHTML = data.message;
-    body.appendChild(paragraph);
-    content.appendChild(body);
-
-    const footer = document.createElement('div');
-    footer.className = 'modal-footer';
-
-    data.buttons.forEach((btn: any) => {
-      const btnElement = document.createElement('button');
-      btnElement.className = `btn btn-${btn.type}`;
-      btnElement.innerHTML = btn.text;
-      btnElement.onclick = btn.callback;
-      footer.appendChild(btnElement);
-    });
-
-    content.appendChild(footer);
-    dialog.appendChild(content);
-    modal.appendChild(dialog);
-    return modal;
   }
 
   drawLoginPage(model: ManagerModel) {
     const loginContainer = document.createElement('div');
     loginContainer.className = 'loginContainer';
+
+    const logo = document.createElement('img');
+    logo.className = 'imgStartPage';
+    loginContainer.appendChild(logo);
 
     const lblTitle = document.createElement('label');
     lblTitle.innerHTML = 'Project manager';
@@ -230,6 +106,127 @@ export class ManagerView {
     this.container.appendChild(loginContainer);
   }
 
+  /**
+   * @param data requires COLOR, TITLE and MESSAGE property
+   */
+  static displayPopup(data: any) {
+    var toast = document.getElementById('toastNotif');
+    if (toast !== null) toast.remove();
+    toast = ManagerView.createPopup(data);
+    $('.manager')[0].appendChild(toast);
+
+    (<any>$('#toastNotif')).toast({ delay: 4000 });
+    (<any>$('#toastNotif')).toast('show');
+  }
+
+  private static createPopup(data: any) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.id = 'toastNotif';
+
+    const toastHeader = document.createElement('div');
+    toastHeader.className = 'toast-header';
+
+    const statusIcon = document.createElement('div');
+    statusIcon.className = 'statusIcon';
+    statusIcon.style.backgroundColor = data.color;
+    toastHeader.appendChild(statusIcon);
+
+    const lblHeader = document.createElement('strong');
+    lblHeader.className = 'mr-auto';
+    lblHeader.innerHTML = data.title;
+    toastHeader.appendChild(lblHeader);
+
+    const time = document.createElement('small');
+    toastHeader.appendChild(time);
+
+    const btnClose = document.createElement('button');
+    btnClose.type = 'button';
+    btnClose.className = 'ml-2 mb-1 close';
+    toastHeader.appendChild(btnClose);
+
+    const span = document.createElement('span');
+    span.innerHTML = '&times;';
+    btnClose.appendChild(span);
+
+    toast.appendChild(toastHeader);
+
+    const body = document.createElement('div');
+    body.className = 'toast-body';
+    body.innerHTML = data.message;
+
+    toast.appendChild(body);
+    return toast;
+  }
+
+  /**
+   * @param data requires COLOR, TITLE, MESSAGE and BUTTONS property.
+   * Each button requires TEXT, TYPE (class name) and CALLBACK FUNCTION.
+   */
+  static displayModal(data: any) {
+    let modal = document.getElementById('modalDialog');
+    if (modal !== null) modal.remove();
+    modal = ManagerView.createModal(data);
+    $('.manager')[0].appendChild(modal);
+
+    (<any>$('#modalDialog')).modal('show');
+  }
+
+  private static createModal(data: any) {
+    const modal = document.createElement('div');
+    modal.id = 'modalDialog';
+    modal.className = 'modal fade';
+    modal.tabIndex = -1;
+
+    const dialog = document.createElement('div');
+    dialog.className = 'modal-dialog modal-dialog-centered';
+
+    const content = document.createElement('div');
+    content.className = 'modal-content';
+
+    const header = document.createElement('div');
+    header.className = 'modal-header';
+
+    const title = document.createElement('h5');
+    title.className = 'modal-title';
+    title.innerHTML = data.title;
+    header.appendChild(title);
+
+    const btnClose = document.createElement('button');
+    header.appendChild(btnClose);
+    let btnHtml = '<button class="close" ';
+    btnHtml += 'data-dismiss="modal"><span>&times;</span></button>';
+    btnClose.outerHTML = btnHtml;
+    content.appendChild(header);
+
+    const body = document.createElement('div');
+    body.className = 'modal-body';
+
+    const paragraph = document.createElement('p');
+    paragraph.innerHTML = data.message;
+    body.appendChild(paragraph);
+    content.appendChild(body);
+
+    const footer = document.createElement('div');
+    footer.className = 'modal-footer';
+
+    data.buttons.forEach((btn: any) => {
+      const btnElement = document.createElement('button');
+      btnElement.className = `btn btn-${btn.type} btnModal`;
+      btnElement.innerHTML = btn.text;
+      btnElement.onclick = () => {
+        btn.callback();
+        (<any>$('#modalDialog')).modal('toggle');
+      };
+      footer.appendChild(btnElement);
+    });
+
+    content.appendChild(footer);
+    dialog.appendChild(content);
+    modal.appendChild(dialog);
+    return modal;
+  }
+
   drawForm(
     parent: HTMLElement,
     btnContainer: HTMLElement,
@@ -299,12 +296,12 @@ export class ManagerView {
       loginMsg = await model.tryLoginUser(nn, pswd);
       if (loginMsg === 'success') {
         // remove login page
-        document.getElementsByClassName('undrawLogo')[0].remove();
+        document.getElementsByClassName('imgStartPage')[0].remove();
         document.getElementsByClassName('loginContainer')[0].remove();
 
         // draw dashboard
         this.drawProfileHeader(model);
-        this.drawDashboard(model);
+        this.drawDashboard(model.getCurrentUser().model.getProjects());
 
         // display success message
         ManagerView.displayPopup({
@@ -343,12 +340,12 @@ export class ManagerView {
       signupMsg = await model.trySignUpUser(nn, pswd);
       if (signupMsg === 'success') {
         // remove login page
-        document.getElementsByClassName('undrawLogo')[0].remove();
+        document.getElementsByClassName('imgStartPage')[0].remove();
         document.getElementsByClassName('loginContainer')[0].remove();
 
         // draw dashboard
         this.drawProfileHeader(model);
-        this.drawDashboard(model);
+        this.drawDashboard(model.getCurrentUser().model.getProjects());
 
         // display success message
         ManagerView.displayPopup({
@@ -401,6 +398,7 @@ export class ManagerView {
     // Dropdown buttons
     this.drawActionDropdown(menu, model);
     this.drawSortingDropdown(menu, model);
+    this.drawFilterDropdown(menu, model);
     this.drawProfileDropdown(menu, model);
   }
 
@@ -423,8 +421,11 @@ export class ManagerView {
     return dropdown;
   }
 
-  drawDashboard(model: ManagerModel) {
-    const projects = model.getCurrentUser().model.getProjects();
+  drawDashboard(projects: Project[]) {
+    if (projects.length === 0) {
+      this.drawEmptyDashboard();
+      return;
+    }
 
     let dashboard = <HTMLElement>(
       document.getElementsByClassName('dashboard')[0]
@@ -434,6 +435,30 @@ export class ManagerView {
     projects.forEach((proj: Project) => proj.drawPreview(dashboard));
 
     this.container.appendChild(dashboard);
+  }
+
+  drawEmptyDashboard() {
+    if (document.getElementsByClassName('emptyDashboardMessage')[0]) return;
+
+    const container = document.createElement('div');
+    container.className = 'emptyDashboardMessage';
+
+    const imgEmpty = document.createElement('img');
+    imgEmpty.className = 'imgEmptyDashboard';
+    container.appendChild(imgEmpty);
+
+    const lblMessage = document.createElement('label');
+    lblMessage.className = 'lblEmptyDashboard';
+    lblMessage.innerHTML = 'Your dashboard is empty...';
+    container.appendChild(lblMessage);
+
+    const btnAdd = document.createElement('button');
+    btnAdd.id = 'btnAddProjectEmpty';
+    btnAdd.className = 'btn btn-success';
+    btnAdd.innerHTML = '<i class="fas fa-plus" id="iconPlus"></i>Add project';
+    container.appendChild(btnAdd);
+
+    this.container.appendChild(container);
   }
 
   drawProfileDropdown(parent: HTMLElement, model: ManagerModel) {
@@ -511,7 +536,8 @@ export class ManagerView {
         'getNumOfTasks',
         btnSortTasks,
         dropdownItems,
-        model
+        model,
+        true
       );
     dropdownItems.push(btnSortTasks);
 
@@ -552,9 +578,10 @@ export class ManagerView {
               // Perform action
               const user = model.getCurrentUser();
               user.model.markAllAsFinished();
-              DatabaseAPI.updateProjects(user.model.getProjects()).then(() => {
+              const projects = user.model.getProjects();
+              DatabaseAPI.updateProjects(projects).then(() => {
                 // redraw projects
-                this.redrawDashboard(model);
+                this.redrawDashboard(projects);
                 // notify user
                 ManagerView.displayPopup({
                   color: 'green',
@@ -567,9 +594,7 @@ export class ManagerView {
           {
             text: 'No',
             type: 'secondary',
-            callback: () => {
-              (<any>$('#modalDialog')).modal('toggle');
-            },
+            callback: () => { },
           },
         ],
       });
@@ -596,7 +621,7 @@ export class ManagerView {
               DatabaseAPI.deleteProjects(user.model.getProjects()).then(() => {
                 user.model.setProjects([]);
                 // update ui
-                this.redrawDashboard(model);
+                this.redrawDashboard([]);
                 // notify user
                 ManagerView.displayPopup({
                   color: 'green',
@@ -609,9 +634,7 @@ export class ManagerView {
           {
             text: 'No',
             type: 'secondary',
-            callback: () => {
-              (<any>$('#modalDialog')).modal('toggle');
-            },
+            callback: () => { },
           },
         ],
       });
@@ -633,10 +656,81 @@ export class ManagerView {
     btnAction.outerHTML = btnHtml;
   }
 
+  drawFilterDropdown(parent: HTMLDivElement, model: ManagerModel) {
+    // Filter dropdown
+    let dropdownItems: HTMLElement[] = [];
+    const user = model.getCurrentUser();
+    const projects = user.model.getProjects();
+
+    // Filter ALL projects
+    const btnFilterAll = this.createFilterDropdownItem('All ✓', projects, dropdownItems);
+    dropdownItems.push(btnFilterAll);
+
+    // Filter TO DO projects
+    const btnFilterToDo = this.createFilterDropdownItem(
+      'To do',
+      projects.filter((p: Project) => p.model.getProjectState() === TaskState.TO_DO),
+      dropdownItems
+    );
+    dropdownItems.push(btnFilterToDo);
+
+    // Filter IN PROGRESS projects
+    const btnInProgress = this.createFilterDropdownItem(
+      'In progress',
+      projects.filter((p: Project) => p.model.getProjectState() === TaskState.IN_PROGRESS),
+      dropdownItems
+    );
+    dropdownItems.push(btnInProgress);
+
+    // Filter FINISHED projects
+    const btnFinished = this.createFilterDropdownItem(
+      'Finished',
+      projects.filter((p: Project) => p.model.getProjectState() === TaskState.FINISHED),
+      dropdownItems
+    );
+    dropdownItems.push(btnFinished);
+
+    // Filter button
+    const dropdown = this.drawDropdownButton(
+      parent,
+      'btnFilterDropdown',
+      dropdownItems
+    );
+    const btnFilter = document.createElement('button');
+    dropdown.appendChild(btnFilter);
+    let btnHtml =
+      '<button class="btn btn-light dropdown-toggle menuButton" type="button" ';
+    btnHtml +=
+      'id="btnFilterDropdown" data-toggle="dropdown" aria-haspopup="true" ';
+    btnHtml += 'aria-expanded="false">Filter</button>';
+    btnFilter.outerHTML = btnHtml;
+  }
+
+  createFilterDropdownItem(
+    btnText: string,
+    projects: Project[],
+    dropdownItems: HTMLElement[]
+  ): HTMLElement {
+    const btn = document.createElement('a');
+    btn.className = 'dropdown-item';
+    btn.innerHTML = btnText;
+    btn.onclick = () => {
+      this.redrawDashboard(projects);
+      this.changeFilteringCheckmark(dropdownItems, btn);
+    }
+    return btn;
+  }
+
+  changeFilteringCheckmark(dropdownItems: Element[], selectedItem: Element) {
+    // make this sorting method active
+    dropdownItems.map((el) => (el.innerHTML = el.innerHTML.replace(' ✓', '')));
+    selectedItem.innerHTML += ' ✓';
+  }
+
   changeSortingMethod(
     method: 'getTimestamp' | 'getDueDate' | 'getNumOfTasks',
-    sortingButtonEl: HTMLAnchorElement,
-    dropdownArray: HTMLAnchorElement[],
+    sortingButtonEl: HTMLElement,
+    dropdownArray: HTMLElement[],
     model: ManagerModel,
     reverseOperators: boolean = false
   ) {
@@ -645,19 +739,34 @@ export class ManagerView {
     sortingButtonEl.innerHTML += ' ✓';
 
     // apply sorting method
-    model.getCurrentUser().model.sortProjects(method, reverseOperators);
+    const user = model.getCurrentUser();
+    user.model.sortProjects(method, reverseOperators);
 
     // redraw dashboard
-    this.redrawDashboard(model);
+    this.redrawDashboard(user.model.getProjects());
+
+    // reset filtering method
+    const filterDropdownItems = document.getElementById('btnFilterDropdown').parentElement.children[0].children;
+    const items: Element[] = Array.from(filterDropdownItems);
+    this.changeFilteringCheckmark(items, items[0]);
   }
 
-  redrawDashboard(model: ManagerModel) {
+  redrawDashboard(projects: Project[]) {
+    // clear empty dashboard message (if exists)
+    const empty = document.getElementsByClassName('emptyDashboardMessage')[0];
+    if (empty) empty.remove();
+
+    // clear previous dashboard
     const dashboard = document.getElementsByClassName('dashboard')[0];
     this.removeElementsChildren(dashboard);
-    this.drawDashboard(model);
+
+    // redraw
+    this.drawDashboard(projects);
   }
 
   removeElementsChildren(element: Element) {
+    if (element === undefined) return;
+
     while (element.children[0]) element.removeChild(element.children[0]);
   }
 }

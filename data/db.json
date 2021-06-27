@@ -9,6 +9,11 @@
       "id": 2,
       "nickname": "JohnSnow",
       "password": "pswd321"
+    },
+    {
+      "nickname": "asdf",
+      "password": "asdf",
+      "id": 3
     }
   ],
   "projects": [
@@ -42,10 +47,10 @@
     },
     {
       "id": 5,
-      "name": "InfoSys",
-      "dueDate": "2021-08-01T00:00:00",
-      "timestamp": "2021-06-05T00:00:00",
-      "userId": 2
+      "name": "OOP",
+      "dueDate": "2021-07-01T00:00:00",
+      "timestamp": "2021-06-27T00:00:00",
+      "userId": 1
     }
   ],
   "tasks": [
@@ -104,6 +109,13 @@
       "description": "Docker container depoloyment",
       "state": "Finished",
       "projectId": 4
+    },
+    {
+      "id": 9,
+      "name": "Kod",
+      "description": "Write code",
+      "state": "To do",
+      "projectId": 2
     }
   ]
 }

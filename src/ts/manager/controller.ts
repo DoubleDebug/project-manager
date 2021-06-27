@@ -1,5 +1,5 @@
-import { ManagerModel } from "./model";
-import { ManagerView } from "./view";
+import { ManagerModel } from './model';
+import { ManagerView } from './view';
 
 export class Manager {
     public model: ManagerModel;
