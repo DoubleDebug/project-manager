@@ -1,0 +1,124 @@
+hr {
+    margin: 0;
+    width: 100%;
+    color: rgb(215, 215, 215);
+}
+
+.editor {
+    padding: 5px;
+    background: white;
+    border-radius: 0.25rem;
+    justify-self: center;
+    align-self: center;
+    width: clamp(830px, 60%, 1000px);
+    height: max-content;
+    box-shadow: 7px 7px rgb(255 255 255 / 30%);
+}
+
+.editor label {
+    color: black;
+}
+
+.editorHeader {
+    border: 1px solid white;
+    display: flex;
+    min-height: 200px;
+}
+
+.imgProjectHeader {
+    padding: 15px;
+    max-width: 200px;
+}
+
+.projectHeader {
+    display: grid;
+    grid-template-rows: 38px auto 16px;
+    grid-template-columns: auto auto 100px 100px 38px;
+    row-gap: 10px;
+    column-gap: 10px;
+    padding: 10px;
+    padding-top: 15px;
+    width: 100%;
+    align-items: center;
+}
+
+.projectHeader input {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.projectHeader label {
+    text-align: left;
+}
+
+.inputProjectName {
+    grid-column: 1 / 3;
+    font-size: 1.5em;
+}
+
+#lblPercentage {
+    grid-row: 2 / 5;
+    grid-column: 4 / 6;
+    font-family: var(--titleFont);
+    text-align: right;
+    align-self: center;
+    font-size: 4em;
+}
+
+.lblTimeLeftEditor {
+    grid-row: 3 / 3;
+    grid-column: 1 / 2;
+}
+
+.lblTasksDone {
+    grid-row: 3 / 3;
+    grid-column: 2 / 3;
+}
+
+.progressEditor {
+    width: 100%;
+    height: 25px;
+    grid-row: 4 / 4;
+    grid-column: 1 / 6;
+}
+
+.progressEditor .progress-bar {
+    background: #28a745;
+}
+
+.iconProjectEditor {
+    color: black;
+}
+
+#btnOptions {
+    margin-right: 0;
+}
+
+.taskDashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    min-height: 300px;
+    max-height: 600px;
+    padding: 20px;
+}
+
+.taskDashboardSection {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    row-gap: 10px;
+    border-right: 1px solid rgb(215, 215, 215);
+    padding-top: 50px;
+}
+
+.taskDashboardSection:last-child {
+    border-right: none;
+}
+
+.lblSection {
+    position: absolute;
+    top: 0;
+    color: gray;
+    font-size: 1.5em;
+    text-align: center;
+}

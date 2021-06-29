@@ -432,7 +432,9 @@ export class ManagerView {
     );
     if (!dashboard) dashboard = document.createElement('div');
     dashboard.className = 'dashboard';
-    projects.forEach((proj: Project) => proj.drawPreview(dashboard));
+    projects.forEach((proj: Project) => {
+      proj.drawPreview(dashboard, () => this.drawDashboard(projects));
+    });
 
     this.container.appendChild(dashboard);
   }
@@ -758,13 +760,13 @@ export class ManagerView {
 
     // clear previous dashboard
     const dashboard = document.getElementsByClassName('dashboard')[0];
-    this.removeElementsChildren(dashboard);
+    ManagerView.removeElementsChildren(dashboard);
 
     // redraw
     this.drawDashboard(projects);
   }
 
-  removeElementsChildren(element: Element) {
+  static removeElementsChildren(element: Element) {
     if (element === undefined) return;
 
     while (element.children[0]) element.removeChild(element.children[0]);

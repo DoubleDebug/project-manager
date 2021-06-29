@@ -11,11 +11,7 @@ export class Project {
         this.view = new ProjectView();
     }
 
-    draw(parent: HTMLElement): void {
-        this.view.draw(parent, this.model);
-    }
-
-    drawPreview(parent: HTMLElement) {
-        this.view.drawPreview(parent, this.model);
+    drawPreview(parent: HTMLElement, goBackFunctionCallback: Function) {
+        this.view.drawPreview(parent, this.model, goBackFunctionCallback);
     }
 }

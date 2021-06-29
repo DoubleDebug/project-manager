@@ -10,52 +10,75 @@ export class DatabaseAPI {
     DatabaseAPI.rootURL = url;
   }
 
-  // CONVERSION methods
+  //#region CONVERSION methods
 
+  /**
+   * @param taskData is an array of Tasks (database objects)
+   */
   static convertTaskFromDbToMvc(taskData: any): Task[] {
     if (taskData.length == 0) return [];
 
     const tasks: Task[] = [];
     taskData.forEach((task: any) => {
-      tasks.push(new Task(task.id, task.name, task.description, task.state));
+      tasks.push(new Task(task.id, task.name, task.state));
     });
     return tasks;
   }
 
+  /**
+   * @param projData is an array of Projects (database objects)
+   */
   static async convertProjectFromDbToMvc(projData: any): Promise<Project[]> {
     if (projData.length == 0) return [];
 
     const projects: Project[] = [];
-    for (let proj of projData) {
-      const newProject = new Project(
-        proj.id,
-        proj.name,
-        proj.dueDate,
-        proj.timestamp
-      );
-      await DatabaseAPI.getTasksByProject(proj.id).then((tasks) =>
-        newProject.model.setTasks(tasks)
-      );
-      projects.push(newProject);
-    }
-    return projects;
+    const taskPromises: Promise<Task[]>[] = [];
+
+    projData.forEach((p: any) => {
+      taskPromises.push(DatabaseAPI.getTasksByProject(p.id));
+    });
+
+    return Promise.all(taskPromises).then((tasks: Task[][]) => {
+      for (let i = 0; i < projData.length; i++) {
+        const newProject = new Project(
+          projData[i].id,
+          projData[i].name,
+          projData[i].dueDate,
+          projData[i].timestamp
+        );
+        newProject.model.setTasks(tasks[i]);
+        projects.push(newProject);
+      }
+
+      return projects;
+    });
   }
 
+  /**
+   * @param userData is an array of Users (database objects)
+   */
   static async convertUserFromDbToMvc(userData: any): Promise<User[]> {
     if (userData.length == 0) return [];
 
     const users: User[] = [];
-    for (let user of userData) {
-      const newUser = new User(user.id, user.nickname, user.password);
-      await DatabaseAPI.getProjectsByUser(user.id).then((projects) =>
-        newUser.model.setProjects(projects)
-      );
-      users.push(newUser);
-    }
-    return users;
+    const projectPromises: Promise<Project[]>[] = [];
+
+    userData.forEach((u: any) => {
+      projectPromises.push(DatabaseAPI.getProjectsByUser(u.id));
+    });
+
+    return Promise.all(projectPromises).then((projects: Project[][]) => {
+      for (let i = 0; i < userData.length; i++) {
+        const newUser = new User(userData[i].id, userData[i].nickname, userData[i].password);
+        newUser.model.setProjects(projects[i]);
+        users.push(newUser);
+      }
+      return users;
+    });
   }
 
-  // USER table methods
+  //#endregion CONVERSION methods
+  //#region USER table methods
 
   static async getAllUsers(): Promise<User[]> {
     return fetch(`${DatabaseAPI.rootURL}/users`)
@@ -95,7 +118,8 @@ export class DatabaseAPI {
     });
   }
 
-  // PROJECT table methods
+  //#endregion USER table methods
+  //#region PROJECT table methods
 
   static async getAllProjects(): Promise<Project[]> {
     return fetch(`${DatabaseAPI.rootURL}/projects`)
@@ -166,7 +190,8 @@ export class DatabaseAPI {
     Promise.all(promises);
   }
 
-  // TASK table methods
+  //#endregion PROJECT table methods
+  //#region TASK table methods
 
   static async getAllTasks(): Promise<Task[]> {
     return fetch(`${DatabaseAPI.rootURL}/tasks`)
@@ -192,7 +217,6 @@ export class DatabaseAPI {
             },
             body: JSON.stringify({
               name: task.model.name,
-              description: task.model.description,
               state: task.model.getState(),
             }),
           });
@@ -203,3 +227,5 @@ export class DatabaseAPI {
     Promise.all(promises);
   }
 }
+
+//#endregion TASK table methods

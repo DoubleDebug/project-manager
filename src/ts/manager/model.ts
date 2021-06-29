@@ -3,7 +3,7 @@ import { User } from "../user/controller";
 
 export class ManagerModel {
     private currentUser: User;
-    
+
     async loadLoggedInUser() {
         const currentUserId = this.getUserCookie();
         if (currentUserId === -1)
@@ -22,8 +22,8 @@ export class ManagerModel {
             return;
 
         var d = new Date();
-        d.setTime(d.getTime() + (7*24*60*60*1000));     // expires in 7 days
-        var expires = 'expires='+ d.toUTCString();
+        d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));     // expires in 7 days
+        var expires = 'expires=' + d.toUTCString();
         document.cookie = `userId=${id}; expires=${expires}; path=/;`;
     }
 
@@ -34,16 +34,16 @@ export class ManagerModel {
         var name = 'userId=';
         var decodedCookie = decodeURIComponent(document.cookie);
         var cookieArray = decodedCookie.split(';');
-        for (var i=0; i<cookieArray.length; i++) {
+        for (var i = 0; i < cookieArray.length; i++) {
             var cookie = cookieArray[i];
             while (cookie.charAt(0) == ' ') {
                 cookie = cookie.substring(1);
-              }
+            }
 
             if (cookie.indexOf(name) == 0) {
                 return Number(cookie.substring(name.length, cookie.length));
             }
-        }        
+        }
         return -1;
     }
 
@@ -108,9 +108,15 @@ export class ManagerModel {
     }
 
     static shortenString(s: string, length: number): string {
-        if (s.length <= length)
-            return s;
-        
-        return s.substr(0, length - 3) + '...';
+        if (s.length <= length) return s;
+
+        // remove last 3 letters
+        let shortStr = s.substr(0, length - 3);
+
+        // remove white space at the end
+        if (shortStr.charAt(shortStr.length - 1) === ' ')
+            shortStr = shortStr.slice(0, shortStr.length - 1);
+
+        return shortStr + '...';
     }
 }

@@ -1,4 +1,4 @@
-import { timeAgoFormatted, timeLeft } from 'time-left-ago';
+import { format, formatDistance } from 'date-fns';
 import { Task } from '../task/controller';
 import { TaskState } from '../taskState';
 
@@ -38,6 +38,10 @@ export class ProjectModel {
         return new Date(this.dueDate);
     }
 
+    getDueDateFormatted(): string {
+        return format(this.getDueDate(), 'yyyy-MM-dd');
+    }
+
     getTimestamp(): Date {
         return new Date(this.timestamp);
     }
@@ -69,14 +73,11 @@ export class ProjectModel {
         }, 0);
     }
 
-    getTimeRemaining(): string {
-        if (this.getDueDate() < new Date()) {
-            const timeAgo = timeAgoFormatted(this.dueDate.toString());
-            return timeAgo.toLowerCase() + ' ago';
-        } else if (this.getDueDate() > new Date())
-            return timeLeft(this.getDueDate(), 1);
-
-        return 'Today';
+    getTimeRemaining(addSuffix: boolean = false): string {
+        if (this.getDueDate() < (new Date()))
+            return formatDistance(this.getDueDate(), new Date(), { addSuffix: addSuffix });
+        else
+            return formatDistance(this.getDueDate(), new Date()) + ' left';
     }
 
     getProjectState(): TaskState {
@@ -107,5 +108,9 @@ export class ProjectModel {
         // if (numOfFinishedTasks === numOfTasks) return TaskState.FINISHED;
 
         // return TaskState.IN_PROGRESS;
+    }
+
+    getTasksInState(state: TaskState): Task[] {
+        return this.tasks.filter((t: Task) => t.model.getState() === state);
     }
 }

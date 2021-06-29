@@ -3,13 +3,11 @@ import { TaskState } from '../taskState';
 export class TaskModel {
   private id: number;
   public name: string;
-  public description: string;
   private state: TaskState;
 
-  constructor(id: number, name: string, description: string, state: TaskState) {
+  constructor(id: number, name: string, state: TaskState) {
     this.id = id;
     this.name = name;
-    this.description = description;
     this.state = state;
   }
 

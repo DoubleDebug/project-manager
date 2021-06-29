@@ -57,63 +57,54 @@
     {
       "id": 1,
       "name": "Babel",
-      "description": "Configure Babel",
       "state": "Finished",
       "projectId": 1
     },
     {
       "id": 2,
       "name": "Webpack",
-      "description": "Configure Webpack",
       "state": "To do",
       "projectId": 1
     },
     {
       "id": 3,
       "name": "Classes",
-      "description": "Add classes",
       "state": "To do",
       "projectId": 1
     },
     {
       "id": 4,
       "name": "Documentation",
-      "description": "Write documentation",
       "state": "Finished",
       "projectId": 2
     },
     {
       "id": 5,
       "name": "Kod",
-      "description": "Write code",
       "state": "To do",
       "projectId": 2
     },
     {
       "id": 6,
       "name": "JPA",
-      "description": "Java Persistence API",
       "state": "Finished",
       "projectId": 4
     },
     {
       "id": 7,
       "name": "EJB",
-      "description": "Business logic",
       "state": "In progress",
       "projectId": 4
     },
     {
       "id": 8,
       "name": "Docker",
-      "description": "Docker container depoloyment",
       "state": "Finished",
       "projectId": 4
     },
     {
       "id": 9,
       "name": "Kod",
-      "description": "Write code",
       "state": "To do",
       "projectId": 2
     }

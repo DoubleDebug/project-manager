@@ -7,6 +7,11 @@
     margin: 20px 50px 20px 50px;
 }
 
+.project label {
+    color: black;
+    text-align: left;
+}
+
 .project:active {
     box-shadow: none;
     transform: translate(5px, 5px);
@@ -27,6 +32,7 @@
 
 .cardImage2 {
     content: url('../../res/projectCard2.svg');
+    aspect-ratio: 747 / 526;
 }
 
 .cardImage3 {
@@ -35,6 +41,7 @@
 
 .cardImage4 {
     content: url('../../res/projectCard4.svg');
+    aspect-ratio: 559 / 582;
 }
 
 .cardImage5 {
@@ -79,4 +86,9 @@
     align-self: center;
     grid-row: 3 / 3;
     grid-column: 1 / 3;
+}
+
+.progress-bar {
+    width: 0%;
+    transition: width 2s ease;
 }
