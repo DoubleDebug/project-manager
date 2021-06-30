@@ -1,4 +1,5 @@
 import { DatabaseAPI } from "../databaseAPI";
+import { Project } from "../project/controller";
 import { User } from "../user/controller";
 
 export class ManagerModel {
@@ -118,5 +119,9 @@ export class ManagerModel {
             shortStr = shortStr.slice(0, shortStr.length - 1);
 
         return shortStr + '...';
+    }
+
+    addNewProject(p: Project) {
+        this.currentUser.model.addProject(p);
     }
 }

@@ -67,7 +67,11 @@
 }
 
 .btnAddTask:hover {
-    background: rgb(240, 240, 240);
+    background: rgb(223, 255, 223);
+}
+
+.btnAddTask:active {
+    background: rgb(189, 255, 189);
 }
 
 .inputTaskName {

@@ -38,6 +38,10 @@ export class ProjectModel {
         return new Date(this.dueDate);
     }
 
+    setDueDate(d: Date) {
+        this.dueDate = d;
+    }
+
     getDueDateFormatted(): string {
         return format(this.getDueDate(), 'yyyy-MM-dd');
     }
@@ -73,11 +77,12 @@ export class ProjectModel {
         }, 0);
     }
 
-    getTimeRemaining(addSuffix: boolean = false): string {
-        if (this.getDueDate() < (new Date()))
-            return formatDistance(this.getDueDate(), new Date(), { addSuffix: addSuffix });
+    getTimeRemaining(addSuffix: boolean = false, refTime: Date = null): string {
+        const refferenceTime: Date = (refTime) ? refTime : this.getDueDate();
+        if (refferenceTime < (new Date()))
+            return formatDistance(refferenceTime, new Date(), { addSuffix: addSuffix });
         else
-            return formatDistance(this.getDueDate(), new Date()) + ' left';
+            return formatDistance(refferenceTime, new Date()) + ' left';
     }
 
     getProjectState(): TaskState {
@@ -112,5 +117,11 @@ export class ProjectModel {
 
     getTasksInState(state: TaskState): Task[] {
         return this.tasks.filter((t: Task) => t.model.getState() === state);
+    }
+
+    validateProjectInput(projectName: string): boolean {
+        if (projectName === '') return false;
+
+        return true;
     }
 }

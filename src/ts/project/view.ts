@@ -1,7 +1,9 @@
+import { DatabaseAPI } from '../databaseAPI';
 import { ManagerModel } from '../manager/model';
 import { ManagerView } from '../manager/view';
 import { Task } from '../task/controller';
 import { TaskState } from '../taskState';
+import { Project } from './controller';
 import { ProjectModel } from './model';
 
 export class ProjectView {
@@ -13,7 +15,7 @@ export class ProjectView {
     this.container.className = 'project';
   }
 
-  drawPreview(parent: HTMLElement, model: ProjectModel, goBackFunctionCallback: Function) {
+  drawPreview(parent: HTMLElement, model: ProjectModel, goBackFunctionCallback: Function, managerModel: ManagerModel) {
     this.parent = parent;
 
     const card = document.createElement('div');
@@ -23,7 +25,7 @@ export class ProjectView {
       ManagerView.removeElementsChildren(parent);
 
       // display project editor
-      this.drawEditor(parent, model, goBackFunctionCallback);
+      this.drawEditor(parent, model, goBackFunctionCallback, managerModel);
     }
     parent.appendChild(card);
 
@@ -68,15 +70,23 @@ export class ProjectView {
     }, 0);
   }
 
-  drawEditor(parent: HTMLElement, model: ProjectModel, goBackFunctionCallback: Function) {
+  drawEditor(parent: HTMLElement, model: ProjectModel | null, goBackFunctionCallback: Function, managerModel: ManagerModel) {
     this.parent = parent;
+
+    let newProject = false;
+    if (!model) {
+      const tomorrowsDate = new Date();
+      tomorrowsDate.setDate(tomorrowsDate.getDate() + 1);
+      model = new ProjectModel(undefined, '', tomorrowsDate, new Date());
+      newProject = true;
+    }
 
     const editor = document.createElement('div');
     editor.className = 'editor';
     parent.appendChild(editor);
 
     // header
-    this.drawEditorHeader(editor, model, goBackFunctionCallback);
+    this.drawEditorHeader(editor, model, goBackFunctionCallback, newProject, managerModel);
 
     const separator = document.createElement('hr');
     editor.appendChild(separator);
@@ -85,7 +95,7 @@ export class ProjectView {
     this.drawTaskDashboard(editor, model);
   }
 
-  drawEditorHeader(parent: HTMLElement, model: ProjectModel, goBackFunctionCallback: Function) {
+  drawEditorHeader(parent: HTMLElement, model: ProjectModel, goBackFunctionCallback: Function, newProject: boolean, managerModel: ManagerModel) {
     const header = document.createElement('div');
     header.className = 'editorHeader';
     parent.appendChild(header);
@@ -122,27 +132,36 @@ export class ProjectView {
     const btnSave = document.createElement('button');
     btnSave.className = 'btn btn-success';
     btnSave.innerHTML = 'Save';
-    btnSave.onclick = () => {
+    btnSave.onclick = async () => {
+      // short data validation
+      if (!model.validateProjectInput(inputName.value)) {
+        ManagerView.displayPopup({
+          color: 'red',
+          title: 'Invalid input',
+          message: 'Project name can\'t remain empty.'
+        });
+        return;
+      }
 
+      const user = managerModel.getCurrentUser().model;
+      await this.saveDataFromForm(model, newProject, managerModel);
+
+      // remove editor
+      parent.remove();
+
+      // draw dashboard
+      goBackFunctionCallback();
+
+      // display message
+      ManagerView.displayPopup({
+        color: 'green',
+        title: 'Successful update',
+        message: 'Successfully updated a project.'
+      })
     }
     projectHeader.appendChild(btnSave);
 
-    // const btnDelete = document.createElement('button');
-    // btnDelete.className = 'btn btn-danger';
-    // btnDelete.innerHTML = '<i class="fas fa-trash"></i>';
-    // btnDelete.onclick = () => {
-
-    // }
-    // projectHeader.appendChild(btnDelete);
-
-    const btnOptions = document.createElement('button');
-    btnOptions.id = 'btnOptions';
-    btnOptions.className = 'btn btn-light';
-    btnOptions.innerHTML = '⋮';
-    btnOptions.onclick = () => {
-
-    }
-    projectHeader.appendChild(btnOptions);
+    this.drawOptionsDropdown(projectHeader, model);
 
     const lblProjectDueDate = document.createElement('label');
     lblProjectDueDate.className = 'lblProjectDueDate';
@@ -154,23 +173,23 @@ export class ProjectView {
     inputProjectDueDate.className = 'form-control';
     inputProjectDueDate.type = 'date';
     inputProjectDueDate.value = model.getDueDateFormatted();
+    inputProjectDueDate.onchange = () => {
+      // update TimeLeft label
+      this.evaluateTimeLeft(lblTimeLeft, model, new Date(inputProjectDueDate.value));
+    }
     projectHeader.appendChild(inputProjectDueDate);
 
     const lblTimeLeft = document.createElement('label');
     lblTimeLeft.className = 'lblTimeLeftEditor';
-    lblTimeLeft.innerHTML = `• Time left: ${model.getTimeRemaining(false)}`;
+    this.evaluateTimeLeft(lblTimeLeft, model, new Date(inputProjectDueDate.value));
     projectHeader.appendChild(lblTimeLeft);
 
     const lblTasksDone = document.createElement('label');
     lblTasksDone.className = 'lblTasksDone';
-    lblTasksDone.innerHTML =
-      `• ${model.getNumOfTasksInState(TaskState.FINISHED)}/${model.getNumOfTasks()} tasks finished`;
     projectHeader.appendChild(lblTasksDone);
 
-    const percentageDone = model.getPercentageDone();
     const lblPercentage = document.createElement('label');
     lblPercentage.id = 'lblPercentage';
-    lblPercentage.innerHTML = `${percentageDone}%`;
     projectHeader.appendChild(lblPercentage);
 
     const progress = document.createElement('div');
@@ -182,7 +201,7 @@ export class ProjectView {
     progress.appendChild(progressBar);
     setTimeout(() => {
       // animate progress bar after rendering
-      progressBar.style.width = `${percentageDone}%`;
+      ProjectView.evaluateTasksFinished(lblTasksDone, lblPercentage, progressBar, model);
     }, 0);
   }
 
@@ -197,17 +216,51 @@ export class ProjectView {
 
     let sectionToDo, sectionInProgress, sectionFinished;
 
-    sectionToDo = this.createSection('To do', tasksToDo);
+    sectionToDo = this.createSection(model, 'To do', tasksToDo);
     dashboard.appendChild(sectionToDo);
 
-    sectionInProgress = this.createSection('In progress', tasksInProgress);
+    dashboard.appendChild(this.createSeparator());
+
+    sectionInProgress = this.createSection(model, 'In progress', tasksInProgress);
     dashboard.appendChild(sectionInProgress);
 
-    sectionFinished = this.createSection('Finished', tasksFinished);
+    dashboard.appendChild(this.createSeparator());
+
+    sectionFinished = this.createSection(model, 'Finished', tasksFinished);
     dashboard.appendChild(sectionFinished);
   }
 
-  createSection(sectionName: string, tasks: Task[]): HTMLElement {
+  drawOptionsDropdown(parent: HTMLElement, model: ProjectModel) {
+    let dropdownItems: HTMLElement[] = [];
+
+    // Mark project as finished
+    const btnMark = document.createElement('a');
+    btnMark.className = 'dropdown-item';
+    btnMark.innerHTML = 'Mark as finished';
+    btnMark.onclick = () => {
+
+    };
+    dropdownItems.push(btnMark);
+
+    // Delete project
+    const btnDelete = document.createElement('a');
+    btnDelete.className = 'dropdown-item';
+    btnDelete.innerHTML = 'Delete project';
+    btnDelete.onclick = () => {
+
+    };
+    dropdownItems.push(btnDelete);
+
+    const dropdown = ManagerView.drawDropdownButton(parent, 'btnOptions', dropdownItems);
+    const dropdownButton = document.createElement('button');
+    dropdown.appendChild(dropdownButton);
+    dropdownButton.className = 'btn btn-light';
+    dropdownButton.id = 'btnOptions';
+    dropdownButton.setAttribute('data-toggle', 'dropdown');
+    dropdownButton.innerHTML = '⋮';
+  }
+
+  createSection(model: ProjectModel, sectionName: string, tasks: Task[]): HTMLElement {
     const section = document.createElement('div');
     section.className = 'taskDashboardSection';
     const lblSection = document.createElement('p');
@@ -215,7 +268,7 @@ export class ProjectView {
     lblSection.innerHTML = sectionName;
     section.appendChild(lblSection);
 
-    tasks.forEach((t: Task) => t.view.drawPreview(section, t.model, sectionName));
+    tasks.forEach((t: Task) => t.view.drawPreview(section, t.model, model, sectionName, null));
 
     const btnAddTask = document.createElement('div');
     btnAddTask.className = 'btnAddTask';
@@ -223,5 +276,51 @@ export class ProjectView {
     section.appendChild(btnAddTask);
 
     return section;
+  }
+
+  createSeparator(): HTMLElement {
+    const separator = document.createElement('div');
+    separator.className = 'separator';
+    return separator;
+  }
+
+  evaluateTimeLeft(label: HTMLElement, model: ProjectModel, selectedDate: Date) {
+    label.innerHTML = `• ${model.getTimeRemaining(true, selectedDate)}`;
+  }
+
+  static evaluateTasksFinished(labelTasks: Element, labelPercentage: Element, progressBar: HTMLElement, model: ProjectModel) {
+    labelTasks.innerHTML =
+      `• ${model.getNumOfTasksInState(TaskState.FINISHED)}/${model.getNumOfTasks()} tasks finished`;
+
+    const percentageDone = model.getPercentageDone();
+    labelPercentage.innerHTML = `${percentageDone}%`;
+    progressBar.style.width = `${percentageDone}%`;
+  }
+
+  async saveDataFromForm(model: ProjectModel, newProject: boolean, managerModel: ManagerModel) {
+    const name = (<HTMLInputElement>document.getElementById('inputProjectName')).value;
+    const date = (<HTMLInputElement>document.getElementById('inputProjectDueDate')).value;
+
+    model.name = name;
+    model.setDueDate(new Date(date));
+
+    if (newProject) {
+      const user = managerModel.getCurrentUser().model;
+      const newProject: Project = new Project(undefined, model.name, model.getDueDate(), model.getTimestamp());
+      const response: any = await DatabaseAPI.addProject(newProject.model, user.getId());
+      await DatabaseAPI.addTasks(model.getTasks(), response.id);
+      managerModel.addNewProject(newProject);
+    }
+    else {
+      const projectPromise = DatabaseAPI.updateProjects([
+        new Project(model.getId(), model.name, model.getDueDate(), model.getTimestamp())
+      ]);
+      const taskPromise = DatabaseAPI.updateTasks(model.getTasks());
+
+      await Promise.all([
+        taskPromise,
+        projectPromise
+      ]);
+    }
   }
 }

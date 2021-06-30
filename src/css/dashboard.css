@@ -57,7 +57,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: max-content;
+    height: 80vh;
 }
 
 .imgEmptyDashboard {

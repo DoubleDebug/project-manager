@@ -1,4 +1,4 @@
-import { Task } from "../task/controller";
+import { ManagerModel } from "../manager/model";
 import { ProjectModel } from "./model";
 import { ProjectView } from "./view";
 
@@ -11,7 +11,7 @@ export class Project {
         this.view = new ProjectView();
     }
 
-    drawPreview(parent: HTMLElement, goBackFunctionCallback: Function) {
-        this.view.drawPreview(parent, this.model, goBackFunctionCallback);
+    drawPreview(parent: HTMLElement, goBackFunctionCallback: Function, managerModel: ManagerModel) {
+        this.view.drawPreview(parent, this.model, goBackFunctionCallback, managerModel);
     }
 }

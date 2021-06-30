@@ -1,83 +1,99 @@
 import { ManagerModel } from "../manager/model";
+import { ProjectModel } from "../project/model";
+import { ProjectView } from "../project/view";
 import { TaskState } from "../taskState";
 import { TaskModel } from "./model";
 
 export class TaskView {
-    drawPreview(parent: Element, model: TaskModel, section: string, container: HTMLElement = null) {
-        let taskPreview = container;
-        if (container) {
+    container: HTMLElement;
+    drawPreview(parent: HTMLElement, model: TaskModel, projectModel: ProjectModel, section: string, container: HTMLElement, switchingSections: boolean = false) {
+        const firstTime = (container === null);
+        if (firstTime) {
+            this.container = container;
+            container = document.createElement('div');
+            if (switchingSections)
+                parent.insertBefore(container, parent.children[parent.children.length - 1]);
+            else
+                parent.appendChild(container);
+        }
+        else {
             while (container.children[0])
                 container.children[0].remove();
         }
-        else {
-            taskPreview = document.createElement('div');
-        }
-
-        taskPreview.className = 'taskPreview';
-        taskPreview.onmouseenter = () => {
+        container.className = 'taskPreview';
+        container.onmouseenter = () => {
             if (iconGoLeft) iconGoLeft.classList.remove('hide');
             if (iconGoRight) iconGoRight.classList.remove('hide');
         }
-        taskPreview.onmouseleave = () => {
+        container.onmouseleave = () => {
             if (iconGoLeft) iconGoLeft.classList.add('hide');
             if (iconGoRight) iconGoRight.classList.add('hide');
         }
-        taskPreview.onclick = () => {
-            this.drawEditor(taskPreview, model, section);
+        container.onclick = () => {
+            while (container.children[0])
+                container.children[0].remove();
+
+            this.drawEditor(
+                container,
+                model,
+                projectModel,
+                section);
         }
 
-        if (!container)
-            parent.appendChild(taskPreview);
-
         const iconGoLeft = document.createElement('i');
-        if (model.getState() !== TaskState.TO_DO) {
+        if (section !== 'To do') {
             iconGoLeft.className = 'fas fa-chevron-left fa-sm iconGoLeftRight hide';
-            iconGoLeft.onclick = () => {
-                const sectionInProgress = <HTMLElement>parent.parentElement.children[1];
+            iconGoLeft.onclick = (e) => {
+                e.stopPropagation();
+
                 const sectionToDo = <HTMLElement>parent.parentElement.children[0];
+                const sectionInProgress = <HTMLElement>parent.parentElement.children[2];
                 if (section === 'In progress') {
                     model.setState(TaskState.TO_DO);
-                    this.drawPreview(sectionToDo, model, 'To do');
+                    this.drawPreview(sectionToDo, model, projectModel, 'To do', null, true);
                 }
                 else if (section === 'Finished') {
                     model.setState(TaskState.IN_PROGRESS);
-                    this.drawPreview(sectionInProgress, model, 'In progress');
+                    this.drawPreview(sectionInProgress, model, projectModel, 'In progress', null, true);
                 }
-                taskPreview.remove();
+                container.remove();
+
+                this.reevaluateProgress(projectModel);
             }
         }
-        taskPreview.appendChild(iconGoLeft);
+        container.appendChild(iconGoLeft);
 
         const lblTaskName = document.createElement('label');
         lblTaskName.innerHTML = ManagerModel.shortenString(model.name, 9);
-        taskPreview.appendChild(lblTaskName);
+        container.appendChild(lblTaskName);
 
         const iconGoRight = document.createElement('i');
-        if (model.getState() !== TaskState.FINISHED) {
+        if (section !== 'Finished') {
             iconGoRight.className = 'fas fa-chevron-right fa-sm iconGoLeftRight hide';
-            iconGoRight.onclick = () => {
-                const sectionFinished = parent.parentElement.children[2];
-                const sectionInProgress = parent.parentElement.children[1];
+            iconGoRight.onclick = (e) => {
+                e.stopPropagation();
+
+                const sectionFinished = <HTMLElement>parent.parentElement.children[4];
+                const sectionInProgress = <HTMLElement>parent.parentElement.children[2];
                 if (section === 'In progress') {
                     model.setState(TaskState.FINISHED);
-                    this.drawPreview(sectionFinished, model, 'Finished');
+                    this.drawPreview(sectionFinished, model, projectModel, 'Finished', null, true);
                 }
                 else if (section === 'To do') {
                     model.setState(TaskState.IN_PROGRESS);
-                    this.drawPreview(sectionInProgress, model, 'In progress');
+                    this.drawPreview(sectionInProgress, model, projectModel, 'In progress', null, true);
                 }
-                taskPreview.remove();
+                container.remove();
+
+                this.reevaluateProgress(projectModel);
             }
         }
-        taskPreview.appendChild(iconGoRight);
+        container.appendChild(iconGoRight);
     }
 
-    drawEditor(container: HTMLElement, model: TaskModel, section: string) {
-        // remove contents from container
-        while (container.children[0])
-            container.children[0].remove();
-
+    drawEditor(container: HTMLElement, model: TaskModel, projectModel: ProjectModel, section: string) {
         container.classList.toggle('expand');
+        container.onclick = null;
 
         const inputTaskName = document.createElement('input');
         inputTaskName.id = 'inputTaskName';
@@ -86,12 +102,26 @@ export class TaskView {
         container.appendChild(inputTaskName);
 
         const btnSave = document.createElement('button');
-        btnSave.className = 'btn btn-primary btnSaveTask';
+        btnSave.className = 'btn btn-success btnSaveTask';
         btnSave.innerHTML = 'Save';
-        container.appendChild(btnSave);
+        btnSave.onclick = (e) => {
+            e.stopPropagation();
+            // update task name
+            model.name = inputTaskName.value;
 
-        container.onclick = () => {
-            this.drawPreview(container.parentElement, model, section, container);
+            // clear element
+            inputTaskName.remove();
+            btnSave.remove();
+
+            this.drawPreview(container.parentElement, model, projectModel, section, container);
         }
+        container.appendChild(btnSave);
+    }
+
+    reevaluateProgress(projectModel: ProjectModel) {
+        const lblTasksDone = document.getElementsByClassName('lblTasksDone')[0];
+        const lblPercentage = document.getElementById('lblPercentage');
+        const progress = <HTMLElement>document.getElementsByClassName('progress-bar')[0];
+        ProjectView.evaluateTasksFinished(lblTasksDone, lblPercentage, progress, projectModel);
     }
 }

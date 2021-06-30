@@ -9,8 +9,4 @@ export class User {
     this.model = new UserModel(id, nickname, password);
     this.view = new UserView();
   }
-
-  draw(parent: HTMLElement): void {
-    this.view.draw(parent, this.model);
-  }
 }

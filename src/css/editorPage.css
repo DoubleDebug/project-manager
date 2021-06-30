@@ -96,29 +96,32 @@ hr {
 
 .taskDashboard {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr;
     min-height: 300px;
     max-height: 600px;
     padding: 20px;
 }
 
 .taskDashboardSection {
-    position: relative;
     display: grid;
     justify-items: center;
     row-gap: 10px;
-    border-right: 1px solid rgb(215, 215, 215);
     padding-top: 50px;
-}
-
-.taskDashboardSection:last-child {
-    border-right: none;
+    height: min-content;
 }
 
 .lblSection {
-    position: absolute;
-    top: 0;
     color: gray;
     font-size: 1.5em;
     text-align: center;
+}
+
+.separator {
+    background: #e5e5e5;
+    width: 100%;
+    height: 100%;
+}
+
+#btnOptions {
+    width: 100%;
 }

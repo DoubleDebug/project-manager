@@ -1,5 +1,6 @@
 import { ManagerView } from './manager/view';
 import { Project } from './project/controller';
+import { ProjectModel } from './project/model';
 import { Task } from './task/controller';
 import { User } from './user/controller';
 
@@ -190,6 +191,20 @@ export class DatabaseAPI {
     Promise.all(promises);
   }
 
+  static async addProject(project: ProjectModel, userId: number): Promise<any> {
+    return $.ajax({
+      url: `${DatabaseAPI.rootURL}/projects`,
+      type: 'POST',
+      data: {
+        name: project.name,
+        dueDate: project.getDueDate().toISOString(),
+        timestamp: project.getTimestamp().toISOString(),
+        userId: userId
+      },
+      async: true,
+    });
+  }
+
   //#endregion PROJECT table methods
   //#region TASK table methods
 
@@ -226,6 +241,28 @@ export class DatabaseAPI {
 
     Promise.all(promises);
   }
-}
 
-//#endregion TASK table methods
+  static async addTasks(tasks: Task[], projectId: number) {
+    let promises: Promise<void>[] = [];
+    tasks.forEach((task: Task) => {
+      promises.push(
+        new Promise(() => {
+          $.ajax({
+            url: `${DatabaseAPI.rootURL}/tasks`,
+            type: 'POST',
+            data: {
+              name: task.model.name,
+              state: task.model.getState(),
+              projectId: projectId
+            },
+            async: true,
+          });
+        })
+      );
+    });
+
+    Promise.all(promises);
+  }
+
+  //#endregion TASK table methods
+}
