@@ -1,6 +1,6 @@
-import { Project } from "../project/controller";
-import { Task } from "../task/controller";
-import { TaskState } from "../taskState";
+import { Project } from '../project/controller';
+import { Task } from '../task/controller';
+import { TaskState } from '../utils/taskState';
 
 export class UserModel {
     private id: number;
@@ -40,25 +40,28 @@ export class UserModel {
     }
 
     removeProject(id: number) {
-        this.projects = this.projects.filter((p: Project) => p.model.getId() !== id);
+        this.projects = this.projects.filter(
+            (p: Project) => p.model.getId() !== id
+        );
     }
 
-    sortProjects(criteria: 'getTimestamp' | 'getDueDate' | 'getNumOfTasks', reverseOperators: boolean = false) {
+    sortProjects(
+        criteria: 'getTimestamp' | 'getDueDate' | 'getNumOfTasks',
+        reverseOperators: boolean = false
+    ) {
         this.projects.sort((a: Project, b: Project): number => {
             if (a.model[criteria]() < b.model[criteria]())
-                return (reverseOperators ? 1 : -1);
+                return reverseOperators ? 1 : -1;
             else if (a.model[criteria]() > b.model[criteria]())
-                return (reverseOperators ? -1 : 1);
+                return reverseOperators ? -1 : 1;
 
             return 0;
-        })
+        });
     }
 
     markAllAsFinished() {
         this.projects.map((proj: Project) => {
-            proj.model.getTasks().map((task: Task) => {
-                task.model.setState(TaskState.FINISHED);
-            });
+            proj.model.markAsFinished();
         });
     }
 

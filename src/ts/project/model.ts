@@ -1,6 +1,6 @@
 import { format, formatDistance } from 'date-fns';
 import { Task } from '../task/controller';
-import { TaskState } from '../taskState';
+import { TaskState } from '../utils/taskState';
 
 export class ProjectModel {
     private id: number;
@@ -58,31 +58,42 @@ export class ProjectModel {
         this.tasks = this.tasks.filter((t: Task) => t.model.getId() !== id);
     }
 
+    markAsFinished() {
+        this.tasks.map((task: Task) => {
+            task.model.setState(TaskState.FINISHED);
+        });
+    }
+
     getPercentageDone(): number {
-        if (this.tasks.length === 0)
-            return 0;
+        if (this.tasks.length === 0) return 0;
 
         const numOfTasks = this.tasks.length;
-        const numOfFinishedTasks = this.getNumOfTasksInState(TaskState.FINISHED);
-        const numOfInProgressTasks = this.getNumOfTasksInState(TaskState.IN_PROGRESS);
+        const numOfFinishedTasks = this.getNumOfTasksInState(
+            TaskState.FINISHED
+        );
+        const numOfInProgressTasks = this.getNumOfTasksInState(
+            TaskState.IN_PROGRESS
+        );
 
-        return Math.round(((numOfFinishedTasks + numOfInProgressTasks / 2) / numOfTasks) * 100);
+        return Math.round(
+            ((numOfFinishedTasks + numOfInProgressTasks / 2) / numOfTasks) * 100
+        );
     }
 
     getNumOfTasksInState(state: TaskState): number {
         return this.tasks.reduce((acc: number, curr: Task): number => {
-            if (curr.model.getState() === state)
-                acc += 1;
+            if (curr.model.getState() === state) acc += 1;
             return acc;
         }, 0);
     }
 
     getTimeRemaining(addSuffix: boolean = false, refTime: Date = null): string {
-        const refferenceTime: Date = (refTime) ? refTime : this.getDueDate();
-        if (refferenceTime < (new Date()))
-            return formatDistance(refferenceTime, new Date(), { addSuffix: addSuffix });
-        else
-            return formatDistance(refferenceTime, new Date()) + ' left';
+        const refferenceTime: Date = refTime ? refTime : this.getDueDate();
+        if (refferenceTime < new Date())
+            return formatDistance(refferenceTime, new Date(), {
+                addSuffix: addSuffix,
+            });
+        else return formatDistance(refferenceTime, new Date()) + ' left';
     }
 
     getProjectState(): TaskState {
@@ -92,8 +103,11 @@ export class ProjectModel {
         let result = TaskState.TO_DO;
         for (let i = 0; i < numOfTasks; i++) {
             const currentTaskState = this.tasks[i].model.getState();
-            if (currentTaskState === TaskState.IN_PROGRESS
-                || (result === TaskState.FINISHED && currentTaskState === TaskState.TO_DO)) {
+            if (
+                currentTaskState === TaskState.IN_PROGRESS ||
+                (result === TaskState.FINISHED &&
+                    currentTaskState === TaskState.TO_DO)
+            ) {
                 result = TaskState.IN_PROGRESS;
                 break;
             }

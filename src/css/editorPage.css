@@ -1,127 +1,126 @@
 hr {
-    margin: 0;
-    width: 100%;
-    color: rgb(215, 215, 215);
+	margin: 0;
+	width: 100%;
+	color: rgb(215, 215, 215);
 }
 
 .editor {
-    padding: 5px;
-    background: white;
-    border-radius: 0.25rem;
-    justify-self: center;
-    align-self: center;
-    width: clamp(830px, 60%, 1000px);
-    height: max-content;
-    box-shadow: 7px 7px rgb(255 255 255 / 30%);
+	padding: 5px;
+	background: white;
+	border-radius: 0.25rem;
+	justify-self: center;
+	align-self: center;
+	width: clamp(830px, 60%, 1000px);
+	height: max-content;
+	box-shadow: 7px 7px rgb(255 255 255 / 30%);
 }
 
 .editor label {
-    color: black;
+	color: black;
 }
 
 .editorHeader {
-    border: 1px solid white;
-    display: flex;
-    min-height: 200px;
+	border: 1px solid white;
+	display: flex;
+	min-height: 200px;
 }
 
 .imgProjectHeader {
-    padding: 15px;
-    max-width: 200px;
+	padding: 15px;
+	max-width: 200px;
 }
 
 .projectHeader {
-    display: grid;
-    grid-template-rows: 38px auto 16px;
-    grid-template-columns: auto auto 100px 100px 38px;
-    row-gap: 10px;
-    column-gap: 10px;
-    padding: 10px;
-    padding-top: 15px;
-    width: 100%;
-    align-items: center;
+	display: grid;
+	grid-template-rows: 38px auto 16px;
+	grid-template-columns: auto auto 100px 100px 38px;
+	row-gap: 10px;
+	column-gap: 10px;
+	padding: 10px;
+	padding-top: 15px;
+	width: 100%;
+	align-items: center;
 }
 
 .projectHeader input {
-    margin-top: 0;
-    margin-bottom: 0;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 .projectHeader label {
-    text-align: left;
+	text-align: left;
 }
 
 .inputProjectName {
-    grid-column: 1 / 3;
-    font-size: 1.5em;
+	grid-column: 1 / 3;
+	font-size: 1.5em;
 }
 
 #lblPercentage {
-    grid-row: 2 / 5;
-    grid-column: 4 / 6;
-    font-family: var(--titleFont);
-    text-align: right;
-    align-self: center;
-    font-size: 4em;
+	grid-row: 2 / 5;
+	grid-column: 4 / 6;
+	font-family: var(--titleFont);
+	text-align: right;
+	align-self: center;
+	font-size: 4em;
 }
 
 .lblTimeLeftEditor {
-    grid-row: 3 / 3;
-    grid-column: 1 / 2;
+	grid-row: 3 / 3;
+	grid-column: 1 / 2;
 }
 
 .lblTasksDone {
-    grid-row: 3 / 3;
-    grid-column: 2 / 3;
+	grid-row: 3 / 3;
+	grid-column: 2 / 3;
 }
 
 .progressEditor {
-    width: 100%;
-    height: 25px;
-    grid-row: 4 / 4;
-    grid-column: 1 / 6;
+	width: 100%;
+	height: 25px;
+	grid-row: 4 / 4;
+	grid-column: 1 / 6;
 }
 
 .progressEditor .progress-bar {
-    background: #28a745;
+	background: #28a745;
 }
 
 .iconProjectEditor {
-    color: black;
+	color: black;
 }
 
 #btnOptions {
-    margin-right: 0;
+	margin-right: 0;
 }
 
 .taskDashboard {
-    display: grid;
-    grid-template-columns: 1fr 1px 1fr 1px 1fr;
-    min-height: 300px;
-    max-height: 600px;
-    padding: 20px;
+	display: grid;
+	grid-template-columns: 1fr 1px 1fr 1px 1fr;
+	min-height: 300px;
+	padding: 20px;
 }
 
 .taskDashboardSection {
-    display: grid;
-    justify-items: center;
-    row-gap: 10px;
-    padding-top: 50px;
-    height: min-content;
+	display: grid;
+	justify-items: center;
+	row-gap: 10px;
+	padding-top: 50px;
+	height: min-content;
 }
 
 .lblSection {
-    color: gray;
-    font-size: 1.5em;
-    text-align: center;
+	color: gray;
+	font-size: 1.5em;
+	text-align: center;
 }
 
 .separator {
-    background: #e5e5e5;
-    width: 100%;
-    height: 100%;
+	background: #e5e5e5;
+	width: 100%;
+	height: 100%;
 }
 
 #btnOptions {
-    width: 100%;
+	width: 100%;
 }

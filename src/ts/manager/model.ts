@@ -1,16 +1,17 @@
-import { DatabaseAPI } from "../databaseAPI";
-import { Project } from "../project/controller";
-import { User } from "../user/controller";
+import { DatabaseAPI } from '../utils/databaseAPI';
+import { Project } from '../project/controller';
+import { User } from '../user/controller';
 
 export class ManagerModel {
     private currentUser: User;
 
     async loadLoggedInUser() {
         const currentUserId = this.getUserCookie();
-        if (currentUserId === -1)
-            this.currentUser = null;
+        if (currentUserId === -1) this.currentUser = null;
         else {
-            this.currentUser = await DatabaseAPI.getUserById(Number(currentUserId));
+            this.currentUser = await DatabaseAPI.getUserById(
+                Number(currentUserId)
+            );
         }
     }
 
@@ -19,11 +20,10 @@ export class ManagerModel {
     }
 
     setUserCookie(id: number) {
-        if (this.currentUser === null)
-            return;
+        if (this.currentUser === null) return;
 
         var d = new Date();
-        d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));     // expires in 7 days
+        d.setTime(d.getTime() + 7 * 24 * 60 * 60 * 1000); // expires in 7 days
         var expires = 'expires=' + d.toUTCString();
         document.cookie = `userId=${id}; expires=${expires}; path=/;`;
     }
@@ -57,17 +57,14 @@ export class ManagerModel {
      * dots.
      */
     validateInputData(nickname: string, password: string): boolean {
-        if (nickname === '' || password === '')
-            return false;
+        if (nickname === '' || password === '') return false;
 
-        if (nickname.length < 4 || nickname.length > 15)
-            return false;
+        if (nickname.length < 4 || nickname.length > 15) return false;
 
-        if (password.length < 4 || password.length > 15)
-            return false;
+        if (password.length < 4 || password.length > 15) return false;
 
         const matchesRegex = /^[a-zA-Z0-9_\.]+$/.exec(nickname);
-        return (matchesRegex !== null);
+        return matchesRegex !== null;
     }
 
     /**
@@ -75,11 +72,9 @@ export class ManagerModel {
      */
     async tryLoginUser(nickname: string, password: string): Promise<string> {
         const user = await DatabaseAPI.getUserByNickname(nickname);
-        if (user === null)
-            return 'user doesn\'t exist';
+        if (user === null) return "user doesn't exist";
 
-        if (user.model.getPassword() !== password)
-            return 'wrong password';
+        if (user.model.getPassword() !== password) return 'wrong password';
 
         // save current user in cookies
         this.currentUser = user;
@@ -91,9 +86,10 @@ export class ManagerModel {
      * @returns a sign up result message ('success' if login successful)
      */
     async trySignUpUser(nickname: string, password: string): Promise<string> {
-        const userWithSameNickname = await DatabaseAPI.getUserByNickname(nickname);
-        if (userWithSameNickname !== null)
-            return 'nickname already taken';
+        const userWithSameNickname = await DatabaseAPI.getUserByNickname(
+            nickname
+        );
+        if (userWithSameNickname !== null) return 'nickname already taken';
 
         const newUser = await DatabaseAPI.addUser(nickname, password);
 
@@ -104,24 +100,16 @@ export class ManagerModel {
     }
 
     logoutUser() {
-        document.cookie = 'userId=;expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
+        document.cookie =
+            'userId=;expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
         location.reload();
-    }
-
-    static shortenString(s: string, length: number): string {
-        if (s.length <= length) return s;
-
-        // remove last 3 letters
-        let shortStr = s.substr(0, length - 3);
-
-        // remove white space at the end
-        if (shortStr.charAt(shortStr.length - 1) === ' ')
-            shortStr = shortStr.slice(0, shortStr.length - 1);
-
-        return shortStr + '...';
     }
 
     addNewProject(p: Project) {
         this.currentUser.model.addProject(p);
+    }
+
+    deleteProject(projId: number) {
+        this.currentUser.model.removeProject(projId);
     }
 }
