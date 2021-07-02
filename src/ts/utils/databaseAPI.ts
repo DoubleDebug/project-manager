@@ -141,9 +141,16 @@ export class DatabaseAPI {
     static async getProjectsByUser(userId: number): Promise<Project[]> {
         return fetch(`${DatabaseAPI.rootURL}/users/${userId}/projects`)
             .then((data) => data.json())
-            .then(
-                async (projectData: any) =>
-                    await DatabaseAPI.convertProjectFromDbToMvc(projectData)
+            .then((projectData: any) =>
+                DatabaseAPI.convertProjectFromDbToMvc(projectData)
+            );
+    }
+
+    static async getProjectsByText(text: string): Promise<Project[]> {
+        return fetch(`${DatabaseAPI.rootURL}/projects?q=${text}`)
+            .then((data) => data.json())
+            .then((projectData: any) =>
+                DatabaseAPI.convertProjectFromDbToMvc(projectData)
             );
     }
 

@@ -24,11 +24,14 @@
 }
 
 .headerTitle {
+    align-self: center;
+    flex-grow: 1;
     font-family: var(--titleFont);
     font-size: 2em;
-    flex-grow: 1;
     text-align: left;
+    white-space: nowrap;
     padding-left: 15px;
+    padding-right: 20px;
 }
 
 .iconColor {
@@ -78,4 +81,31 @@
 
 #iconPlus {
     margin-right: 8px;
+}
+
+#inputSearch {
+    margin: 0;
+    width: 300px;
+    transition: all 0.5s ease;
+    overflow: hidden;
+}
+
+#inputSearch.hide {
+    width: 0px;
+    padding: 0;
+    border: none;
+}
+
+#btnSearch {
+    color: white;
+    padding: 0;
+    align-self: center;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+#searchInputGroup {
+    width: auto;
 }

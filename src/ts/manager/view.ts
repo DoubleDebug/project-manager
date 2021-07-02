@@ -8,6 +8,9 @@ import { removeElementsChildren } from '../utils/removeElementsChildren';
 import { displayPopup } from '../utils/toast';
 import { drawDropdownButton } from '../utils/dropdown';
 import { displayModal } from '../utils/modal';
+import { fromEvent } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { isThisHour } from 'date-fns';
 
 export class ManagerView {
     private parent: HTMLElement;
@@ -277,6 +280,9 @@ export class ManagerView {
         menu.className = 'headerMenu';
         header.appendChild(menu);
 
+        // Search bar
+        this.drawSearchBar(menu, model);
+
         // Add project button
         const btnAddProject = document.createElement('button');
         btnAddProject.className = 'btn btn-success menuButton';
@@ -315,7 +321,58 @@ export class ManagerView {
         this.drawProfileDropdown(menu, model);
     }
 
-    drawDashboard(projects: Project[], model: ManagerModel) {
+    drawSearchBar(parent: HTMLElement, model: ManagerModel) {
+        const inputGroup = document.createElement('div');
+        inputGroup.id = 'searchInputGroup';
+        inputGroup.className = 'input-group';
+        parent.appendChild(inputGroup);
+
+        const form = document.createElement('div');
+        form.className = 'form-outline';
+        inputGroup.appendChild(form);
+
+        const inputSearch = document.createElement('input');
+        inputSearch.id = 'inputSearch';
+        inputSearch.type = 'search';
+        inputSearch.className = 'form-control hide';
+        inputSearch.placeholder = 'Search public projects';
+        form.appendChild(inputSearch);
+
+        const btnSearch = document.createElement('i');
+        btnSearch.id = 'btnSearch';
+        btnSearch.className = 'fas fa-search fa-lg';
+        btnSearch.onmouseenter = () => {
+            inputSearch.classList.remove('hide');
+            inputSearch.focus();
+        };
+        btnSearch.onclick = () => inputSearch.classList.toggle('hide');
+        inputGroup.appendChild(btnSearch);
+
+        fromEvent(inputSearch, 'input')
+            .pipe(
+                switchMap(async () => {
+                    if (inputSearch.value === '') return null;
+                    return DatabaseAPI.getProjectsByText(inputSearch.value);
+                })
+            )
+            .subscribe((projects: Project[]) => {
+                if (projects) {
+                    // display all public projects
+                    // where the project name contains the input
+                    this.redrawDashboard(projects, model, false);
+                } else {
+                    // display user's projects
+                    const user = model.getCurrentUser().model;
+                    this.redrawDashboard(user.getProjects(), model);
+                }
+            });
+    }
+
+    drawDashboard(
+        projects: Project[],
+        model: ManagerModel,
+        clickableProjects: boolean = true
+    ) {
         if (projects.length === 0) {
             this.drawEmptyDashboard(model);
             return;
@@ -334,7 +391,8 @@ export class ManagerView {
                     const projs = user.getProjects();
                     this.drawDashboard(projs, model);
                 },
-                model
+                model,
+                clickableProjects
             );
         });
 
@@ -699,7 +757,11 @@ export class ManagerView {
         this.changeFilteringCheckmark(items, items[0]);
     }
 
-    redrawDashboard(projects: Project[], model: ManagerModel) {
+    redrawDashboard(
+        projects: Project[],
+        model: ManagerModel,
+        clickableProjects: boolean = true
+    ) {
         // clear empty dashboard message (if exists)
         const empty = document.getElementsByClassName(
             'emptyDashboardMessage'
@@ -711,6 +773,6 @@ export class ManagerView {
         removeElementsChildren(dashboard);
 
         // redraw
-        this.drawDashboard(projects, model);
+        this.drawDashboard(projects, model, clickableProjects);
     }
 }

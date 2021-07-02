@@ -1,6 +1,6 @@
-import { ManagerModel } from "../manager/model";
-import { ProjectModel } from "./model";
-import { ProjectView } from "./view";
+import { ManagerModel } from '../manager/model';
+import { ProjectModel } from './model';
+import { ProjectView } from './view';
 
 export class Project {
     public model: ProjectModel;
@@ -11,7 +11,18 @@ export class Project {
         this.view = new ProjectView();
     }
 
-    drawPreview(parent: HTMLElement, goBackFunctionCallback: Function, managerModel: ManagerModel) {
-        this.view.drawPreview(parent, this.model, goBackFunctionCallback, managerModel);
+    drawPreview(
+        parent: HTMLElement,
+        goBackFunctionCallback: Function,
+        managerModel: ManagerModel,
+        clickable: boolean = true
+    ) {
+        this.view.drawPreview(
+            parent,
+            this.model,
+            goBackFunctionCallback,
+            managerModel,
+            clickable
+        );
     }
 }

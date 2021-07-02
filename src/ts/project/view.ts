@@ -24,23 +24,26 @@ export class ProjectView {
         parent: HTMLElement,
         model: ProjectModel,
         goBackFunctionCallback: Function,
-        managerModel: ManagerModel
+        managerModel: ManagerModel,
+        clickable: boolean = true
     ) {
         this.parent = parent;
 
         const card = document.createElement('div');
         card.className = 'card project';
         card.onclick = () => {
-            // remove all project previews
-            removeElementsChildren(parent);
+            if (clickable) {
+                // remove all project previews
+                removeElementsChildren(parent);
 
-            // display project editor
-            this.drawEditor(
-                parent,
-                model,
-                goBackFunctionCallback,
-                managerModel
-            );
+                // display project editor
+                this.drawEditor(
+                    parent,
+                    model,
+                    goBackFunctionCallback,
+                    managerModel
+                );
+            }
         };
         parent.appendChild(card);
 
