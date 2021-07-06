@@ -1,8 +1,20 @@
-/**
- * @param data requires TITLE, MESSAGE and BUTTONS property.
- * Each button requires TEXT, TYPE (class name - e.g. 'primary', 'danger', etc.) and CALLBACK FUNCTION.
- */
-export function displayModal(data: any) {
+type modalData = {
+    title: string;
+    message?: string;
+    body?: HTMLElement;
+    buttons: modalButton[];
+};
+
+type modalButton = {
+    text: string;
+    /**
+     * name of CSS class (e.g. 'primary', 'danger', etc.)
+     */
+    type: string;
+    callback: Function;
+};
+
+export function displayModal(data: modalData) {
     let modal = document.getElementById('modalDialog');
     if (modal !== null) modal.remove();
     modal = createModal(data);
@@ -11,7 +23,7 @@ export function displayModal(data: any) {
     (<any>$('#modalDialog')).modal('show');
 }
 
-function createModal(data: any) {
+function createModal(data: modalData) {
     const modal = document.createElement('div');
     modal.id = 'modalDialog';
     modal.className = 'modal fade';
@@ -38,18 +50,23 @@ function createModal(data: any) {
     btnClose.innerHTML = '<span>&times;</span>';
     content.appendChild(header);
 
-    const body = document.createElement('div');
-    body.className = 'modal-body';
+    if (data.body) {
+        data.body.classList.add('modal-body');
+        content.appendChild(data.body);
+    } else {
+        const body = document.createElement('div');
+        body.className = 'modal-body';
 
-    const paragraph = document.createElement('p');
-    paragraph.innerHTML = data.message;
-    body.appendChild(paragraph);
-    content.appendChild(body);
+        const paragraph = document.createElement('p');
+        paragraph.innerHTML = data.message;
+        body.appendChild(paragraph);
+        content.appendChild(body);
+    }
 
     const footer = document.createElement('div');
     footer.className = 'modal-footer';
 
-    data.buttons.forEach((btn: any) => {
+    data.buttons.forEach((btn: modalButton) => {
         const btnElement = document.createElement('button');
         btnElement.className = `btn btn-${btn.type} btnModal`;
         btnElement.innerHTML = btn.text;

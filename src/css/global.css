@@ -71,3 +71,25 @@ input {
     flex-direction: column;
     height: max-content;
 }
+
+.spinnerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.spinnerAnimation {
+    color: white;
+    width: 2em;
+    height: 2em;
+    margin-bottom: 20px;
+}
+
+.loadingTitle {
+    font-size: 2em;
+    font-family: var(--titleFont);
+}

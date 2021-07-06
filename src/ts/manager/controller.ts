@@ -11,7 +11,9 @@ export class Manager {
     }
 
     draw(parent: HTMLElement) {
+        this.view.toggleLoadingScreen(parent, true);
         this.model.loadLoggedInUser().then(() => {
+            this.view.toggleLoadingScreen(parent, false);
             this.view.draw(parent, this.model);
         });
     }

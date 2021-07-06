@@ -146,7 +146,7 @@ export class DatabaseAPI {
             );
     }
 
-    static async getProjectsByText(text: string): Promise<Project[]> {
+    static getProjectsByText(text: string): Promise<Project[]> {
         return fetch(`${DatabaseAPI.rootURL}/projects?q=${text}`)
             .then((data) => data.json())
             .then((projectData: any) =>

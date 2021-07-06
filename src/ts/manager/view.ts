@@ -8,9 +8,8 @@ import { removeElementsChildren } from '../utils/removeElementsChildren';
 import { displayPopup } from '../utils/toast';
 import { drawDropdownButton } from '../utils/dropdown';
 import { displayModal } from '../utils/modal';
-import { fromEvent } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { isThisHour } from 'date-fns';
+import { from, fromEvent } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 
 export class ManagerView {
     private parent: HTMLElement;
@@ -336,6 +335,14 @@ export class ManagerView {
         inputSearch.type = 'search';
         inputSearch.className = 'form-control hide';
         inputSearch.placeholder = 'Search public projects';
+        inputSearch.oninput = () => {
+            this.clearDashboard();
+            if (inputSearch.value === '')
+                this.drawDashboard(
+                    model.getCurrentUser().model.getProjects(),
+                    model
+                );
+        };
         form.appendChild(inputSearch);
 
         const btnSearch = document.createElement('i');
@@ -350,21 +357,16 @@ export class ManagerView {
 
         fromEvent(inputSearch, 'input')
             .pipe(
-                switchMap(async () => {
-                    if (inputSearch.value === '') return null;
-                    return DatabaseAPI.getProjectsByText(inputSearch.value);
-                })
+                map((event: Event) => (<HTMLInputElement>event.target).value),
+                filter((searchQuery: string) => searchQuery.length >= 0),
+                switchMap((searchQuery: string) => {
+                    // console.log('Searching for ' + searchQuery);
+                    return DatabaseAPI.getProjectsByText(searchQuery);
+                }),
+                switchMap((projects) => from(projects).pipe(take(2)))
             )
-            .subscribe((projects: Project[]) => {
-                if (projects) {
-                    // display all public projects
-                    // where the project name contains the input
-                    this.redrawDashboard(projects, model, false);
-                } else {
-                    // display user's projects
-                    const user = model.getCurrentUser().model;
-                    this.redrawDashboard(user.getProjects(), model);
-                }
+            .subscribe((project: Project) => {
+                this.drawDashboard([project], model, false);
             });
     }
 
@@ -769,10 +771,35 @@ export class ManagerView {
         if (empty) empty.remove();
 
         // clear previous dashboard
-        const dashboard = document.getElementsByClassName('dashboard')[0];
-        removeElementsChildren(dashboard);
+        this.clearDashboard();
 
         // redraw
         this.drawDashboard(projects, model, clickableProjects);
+    }
+
+    clearDashboard() {
+        const dashboard = document.getElementsByClassName('dashboard')[0];
+        removeElementsChildren(dashboard);
+    }
+
+    toggleLoadingScreen(parent: HTMLElement, show: boolean) {
+        if (show) {
+            const container = document.createElement('div');
+            container.className = 'spinnerContainer';
+
+            const animation = document.createElement('div');
+            animation.className = 'spinner-border spinnerAnimation';
+            animation.innerHTML = '<span class="sr-only">Loading...</span>';
+            container.appendChild(animation);
+
+            const title = document.createElement('label');
+            title.className = 'loadingTitle';
+            title.innerHTML = 'Loading...';
+            container.appendChild(title);
+
+            parent.appendChild(container);
+        } else {
+            parent.getElementsByClassName('spinnerContainer')[0].remove();
+        }
     }
 }

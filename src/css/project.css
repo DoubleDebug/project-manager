@@ -92,3 +92,21 @@
     width: 0%;
     transition: width 2s ease;
 }
+
+.changeImageContainer {
+    display: grid;
+    place-items: center;
+}
+
+.imgGenContainer {
+    padding: 30px;
+}
+
+#imgGen {
+    max-width: 400px;
+    height: 300px;
+}
+
+.btnStopGen {
+    width: 300px;
+}

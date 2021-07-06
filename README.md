@@ -18,7 +18,7 @@ TypeScript web app for project management
     -   Promise ✓
 -   RxJS
     -   switchMap ✓
-    -   take
-    -   takeUntil
+    -   take ✓
+    -   takeUntil ✓
     -   zip
     -   merge

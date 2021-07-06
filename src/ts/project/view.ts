@@ -10,6 +10,8 @@ import { shortenString } from '../utils/shortenString';
 import { displayPopup } from '../utils/toast';
 import { drawDropdownButton } from '../utils/dropdown';
 import { displayModal } from '../utils/modal';
+import { fromEvent, interval } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 export class ProjectView {
     container: HTMLElement;
@@ -311,8 +313,72 @@ export class ProjectView {
     ) {
         let dropdownItems: HTMLElement[] = [];
 
+        // Change project image
+        const btnChangeImage = document.createElement('a');
+        dropdownItems.push(btnChangeImage);
+        btnChangeImage.className = 'dropdown-item';
+        btnChangeImage.innerHTML = 'Change image';
+        btnChangeImage.onclick = () => {
+            // image generator
+            const body = document.createElement('div');
+            body.className = 'changeImageContainer';
+
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'imgGenContainer';
+            const img = document.createElement('img');
+            img.id = 'imgGen';
+            img.className = 'cardImage2';
+            imgContainer.appendChild(img);
+            body.appendChild(imgContainer);
+
+            const lblText = document.createElement('p');
+            lblText.innerHTML =
+                'Click stop to choose an image for your project.';
+            body.appendChild(lblText);
+
+            const btnStop = document.createElement('button');
+            btnStop.className = 'btn btn-success btnStopGen';
+            btnStop.innerHTML = 'Stop';
+            btnStop.onclick = () => {
+                const imageNum = img.className.charAt(img.className.length - 1);
+                btnStop.innerHTML = `You've chosen image ${imageNum} ✓`;
+            };
+            body.appendChild(btnStop);
+
+            this.generateRandomImages(img, btnStop);
+
+            // modal
+            displayModal({
+                title: 'Choose image',
+                body: body,
+                buttons: [
+                    {
+                        text: 'Ok',
+                        type: 'primary',
+                        callback: () => {
+                            const imageNum = img.className.charAt(
+                                img.className.length - 1
+                            );
+                            const projectImage =
+                                document.getElementsByClassName(
+                                    'imgProjectHeader'
+                                )[0];
+                            projectImage.className =
+                                'imgProjectHeader cardImage' + imageNum;
+                        },
+                    },
+                    {
+                        text: 'Cancel',
+                        type: 'secondary',
+                        callback: () => {},
+                    },
+                ],
+            });
+        };
+
         // Mark project as finished
         const btnMark = document.createElement('a');
+        dropdownItems.push(btnMark);
         btnMark.className = 'dropdown-item';
         btnMark.innerHTML = 'Mark as finished';
         btnMark.onclick = () => {
@@ -357,10 +423,10 @@ export class ProjectView {
                 ],
             });
         };
-        dropdownItems.push(btnMark);
 
         // Delete project
         const btnDelete = document.createElement('a');
+        dropdownItems.push(btnDelete);
         btnDelete.className = 'dropdown-item';
         btnDelete.innerHTML = 'Delete project';
         btnDelete.onclick = () => {
@@ -408,7 +474,6 @@ export class ProjectView {
                 ],
             });
         };
-        dropdownItems.push(btnDelete);
 
         const dropdown = drawDropdownButton(
             parent,
@@ -421,6 +486,18 @@ export class ProjectView {
         dropdownButton.id = 'btnOptions';
         dropdownButton.setAttribute('data-toggle', 'dropdown');
         dropdownButton.innerHTML = '⋮';
+    }
+
+    generateRandomImages(
+        imgElement: HTMLImageElement,
+        btnElement: HTMLButtonElement
+    ) {
+        interval(500)
+            .pipe(takeUntil(fromEvent(btnElement, 'click')))
+            .subscribe((num: number) => {
+                const imageNum: number = (num % 6) + 1;
+                imgElement.className = `cardImage${imageNum}`;
+            });
     }
 
     createSection(

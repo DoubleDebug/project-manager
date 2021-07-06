@@ -1,7 +1,10 @@
-/**
- * @param data requires COLOR, TITLE and MESSAGE property
- */
-export function displayPopup(data: any) {
+type popupData = {
+    color: string;
+    title: string;
+    message: string;
+};
+
+export function displayPopup(data: popupData) {
     var toast = document.getElementById('toastNotif');
     if (toast !== null) toast.remove();
     toast = createPopup(data);
@@ -11,7 +14,7 @@ export function displayPopup(data: any) {
     (<any>$('#toastNotif')).toast('show');
 }
 
-function createPopup(data: any) {
+function createPopup(data: popupData) {
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.id = 'toastNotif';
