@@ -111,7 +111,7 @@
   width: 300px;
 }
 
-@media only screen and (max-width: 760px) {
+@media only screen and (max-width: 770px) {
   .project {
     margin: 20px 0;
   }
