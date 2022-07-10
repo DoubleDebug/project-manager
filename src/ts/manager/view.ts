@@ -80,15 +80,27 @@ export class ManagerView {
     };
     btnContainer.appendChild(btnLogin);
 
-    const iconInfo = document.createElement('i');
-    iconInfo.id = 'iconInfo';
-    iconInfo.className = 'fas fa-info-circle fa-lg';
-    iconInfo.dataset.shown = 'no';
-    iconInfo.onclick = () => {
-      iconInfo.dataset.shown = iconInfo.dataset.shown === 'yes' ? 'no' : 'yes';
-    };
+    const btnGuest = document.createElement('button');
+    btnGuest.className = 'btn btn-link btnGuest';
+    btnGuest.innerText = 'Login as a guest';
+    btnGuest.onclick = () => {
+      btnContainer.classList.toggle('hide');
+      loginForm.classList.toggle('hide');
 
-    btnContainer.appendChild(iconInfo);
+      // login with a test account
+      (
+        document.getElementById('inputLoginNickname') as HTMLInputElement
+      ).value = 'test';
+      (
+        document.getElementById('inputLoginPassword') as HTMLInputElement
+      ).value = 'test123';
+
+      setTimeout(() => {
+        document.getElementById('btnLoginNow').click();
+      }, 1000);
+    };
+    btnContainer.appendChild(btnGuest);
+
     loginContainer.appendChild(btnContainer);
 
     // draw login and sing up forms
