@@ -1,111 +1,110 @@
 .taskPreview {
-	border: 1px solid #ced4da;
-	border-radius: 5px;
-	display: grid;
-	align-items: center;
-	grid-template-rows: 38px 38px;
-	grid-template-columns: 40px auto 40px;
-	width: 150px;
-	height: 40px;
-	margin: 5px;
-	cursor: pointer;
-	transition: all 0.5s ease;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  display: grid;
+  align-items: center;
+  grid-template-rows: 38px 38px;
+  grid-template-columns: 40px auto 40px;
+  width: 150px;
+  height: 40px;
+  margin: 5px;
+  cursor: pointer;
+  transition: all 0.5s ease;
 }
 
 .taskPreview.expand {
-	width: 200px;
-	height: 120px;
-	grid-template-rows: 55% 45%;
-	grid-template-columns: 10% 60% 20% 10%;
+  height: 120px;
+  grid-template-rows: 55% 45%;
+  grid-template-columns: 10% 60% 20% 10%;
 }
 
 .taskPreview * {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .taskPreview:hover {
-	background: rgb(240, 240, 240);
+  background: rgb(240, 240, 240);
 }
 
 .taskPreview > label {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .iconGoLeftRight {
-	display: grid;
-	place-items: center;
-	border-radius: 5px;
-	height: 100%;
-	text-align: right;
-	width: 40px;
-	opacity: 100%;
-	transition: all 0.5s ease;
+  display: grid;
+  place-items: center;
+  border-radius: 5px;
+  height: 100%;
+  text-align: right;
+  width: 40px;
+  opacity: 100%;
+  transition: all 0.5s ease;
 }
 
 .iconGoLeftRight.hide {
-	width: 0px;
-	opacity: 0%;
-	transition: all 0.5s ease;
+  width: 0px;
+  opacity: 0%;
+  transition: all 0.5s ease;
 }
 
 .iconGoLeftRight:hover {
-	background: rgb(220, 220, 220);
+  background: rgb(220, 220, 220);
 }
 
 .iconGoLeftRight:active {
-	background: rgb(200, 200, 200);
+  background: rgb(200, 200, 200);
 }
 
 .btnAddTask {
-	border: 1px solid #ced4da;
-	border-radius: 5px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 150px;
-	height: 40px;
-	margin: 5px;
-	cursor: pointer;
-	transition: all 0.5s ease;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 40px;
+  margin: 5px;
+  cursor: pointer;
+  transition: all 0.5s ease;
 }
 
 .btnAddTask:hover {
-	background: rgb(240, 240, 240);
+  background: rgb(240, 240, 240);
 }
 
 .btnAddTask:active {
-	background: rgb(230, 230, 230);
+  background: rgb(230, 230, 230);
 }
 
 .inputTaskName {
-	text-align: center;
-	margin-top: 0;
-	margin-bottom: 0;
-	grid-column: 2 / 4;
-	justify-self: center;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  grid-column: 2 / 4;
+  justify-self: center;
 }
 
 .btnSaveTask {
-	grid-column: 2 / 3;
-	align-self: flex-start;
-	margin-right: 10px;
+  grid-column: 2 / 3;
+  align-self: flex-start;
+  margin-right: 10px;
 }
 
 .btnDeleteTask {
-	grid-column: 3 / 4;
-	justify-self: left;
-	align-self: flex-start;
+  grid-column: 3 / 4;
+  justify-self: left;
+  align-self: flex-start;
 }
 
 .lblAddTask {
-	transition: width 0.5s ease;
-	width: 62px;
-	overflow: hidden;
-	white-space: nowrap;
-	margin-left: 5px;
-	margin-bottom: 0;
+  transition: width 0.5s ease;
+  width: 62px;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-left: 5px;
+  margin-bottom: 0;
 }
 
 .lblAddTask.hide {
-	width: 0px;
+  width: 0px;
 }

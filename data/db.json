@@ -1,124 +1,125 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "nickname": "DoubleDebug",
-            "password": "pswd123"
-        },
-        {
-            "id": 2,
-            "nickname": "JohnSnow",
-            "password": "pswd321"
-        },
-        {
-            "nickname": "asdf",
-            "password": "asdf",
-            "id": 3
-        },
-        {
-            "nickname": "miki",
-            "password": "miki",
-            "id": 4
-        }
-    ],
-    "projects": [
-        {
-            "id": 1,
-            "name": "RWA",
-            "dueDate": "2021-07-10T00:00:00.000Z",
-            "timestamp": "2021-06-01T00:00:00",
-            "userId": 1
-        },
-        {
-            "id": 2,
-            "name": "SWE",
-            "dueDate": "2021-07-20T00:00:00",
-            "timestamp": "2021-06-02T00:00:00",
-            "userId": 1
-        },
-        {
-            "id": 3,
-            "name": "Digitalna elektronika",
-            "dueDate": "2021-10-14T22:00:00.000Z",
-            "timestamp": "2021-06-03T00:00:00",
-            "userId": 1
-        },
-        {
-            "id": 4,
-            "name": "Objektno orijentisano programiranje",
-            "dueDate": "2021-09-01T00:00:00",
-            "timestamp": "2021-06-04T00:00:00",
-            "userId": 1
-        },
-        {
-            "id": 5,
-            "name": "OOP",
-            "dueDate": "2021-07-01T00:00:00",
-            "timestamp": "2021-06-27T00:00:00",
-            "userId": 1
-        },
-        {
-            "id": 6,
-            "name": "Racunarska grafika",
-            "dueDate": "2021-08-01T00:00:00",
-            "timestamp": "2021-06-27T00:00:00",
-            "userId": 2
-        }
-    ],
-    "tasks": [
-        {
-            "id": 1,
-            "name": "Babel",
-            "state": "Finished",
-            "projectId": 1
-        },
-        {
-            "id": 2,
-            "name": "Webpack",
-            "state": "To do",
-            "projectId": 1
-        },
-        {
-            "id": 3,
-            "name": "Classes",
-            "state": "To do",
-            "projectId": 1
-        },
-        {
-            "id": 4,
-            "name": "Documentation",
-            "state": "Finished",
-            "projectId": 2
-        },
-        {
-            "id": 5,
-            "name": "Kod",
-            "state": "To do",
-            "projectId": 2
-        },
-        {
-            "id": 6,
-            "name": "JPA",
-            "state": "Finished",
-            "projectId": 4
-        },
-        {
-            "id": 7,
-            "name": "EJB",
-            "state": "In progress",
-            "projectId": 4
-        },
-        {
-            "id": 8,
-            "name": "Docker",
-            "state": "Finished",
-            "projectId": 4
-        },
-        {
-            "id": 9,
-            "name": "Kod",
-            "state": "In progress",
-            "projectId": 6
-        }
-    ]
+  "users": [
+    {
+      "id": 1,
+      "nickname": "DoubleDebug",
+      "password": "pswd123"
+    },
+    {
+      "id": 2,
+      "nickname": "JohnSnow",
+      "password": "pswd321"
+    },
+    {
+      "nickname": "asdf",
+      "password": "asdf",
+      "id": 3
+    },
+    {
+      "nickname": "miki",
+      "password": "miki",
+      "id": 4
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "RWA",
+      "dueDate": "2021-07-10T00:00:00.000Z",
+      "timestamp": "2021-06-01T00:00:00",
+      "userId": 1
+    },
+    {
+      "id": 2,
+      "name": "SWE",
+      "dueDate": "2021-07-20T00:00:00",
+      "timestamp": "2021-06-02T00:00:00",
+      "userId": 1
+    },
+    {
+      "id": 3,
+      "name": "Digitalna elektronika",
+      "dueDate": "2021-10-14T22:00:00.000Z",
+      "timestamp": "2021-06-03T00:00:00",
+      "userId": 1
+    },
+    {
+      "id": 4,
+      "name": "Objektno orijentisano programiranje",
+      "dueDate": "2021-09-01T00:00:00",
+      "timestamp": "2021-06-04T00:00:00",
+      "userId": 1
+    },
+    {
+      "id": 5,
+      "name": "OOP",
+      "dueDate": "2021-07-01T00:00:00",
+      "timestamp": "2021-06-27T00:00:00",
+      "userId": 1
+    },
+    {
+      "id": 6,
+      "name": "Racunarska grafika",
+      "dueDate": "2021-08-01T00:00:00",
+      "timestamp": "2021-06-27T00:00:00",
+      "userId": 2
+    },
+    {
+      "name": "Dusan",
+      "dueDate": "2021-07-12T00:00:00.000Z",
+      "timestamp": "2021-07-11T18:54:47.012Z",
+      "userId": "4",
+      "id": 7
+    }
+  ],
+  "tasks": [
+    {
+      "id": 2,
+      "name": "Webpack",
+      "state": "To do",
+      "projectId": 1
+    },
+    {
+      "id": 3,
+      "name": "Classes",
+      "state": "To do",
+      "projectId": 1
+    },
+    {
+      "id": 4,
+      "name": "Documentation",
+      "state": "Finished",
+      "projectId": 2
+    },
+    {
+      "id": 5,
+      "name": "Kod",
+      "state": "To do",
+      "projectId": 2
+    },
+    {
+      "id": 6,
+      "name": "JPA",
+      "state": "Finished",
+      "projectId": 4
+    },
+    {
+      "id": 7,
+      "name": "EJB",
+      "state": "In progress",
+      "projectId": 4
+    },
+    {
+      "id": 8,
+      "name": "Docker",
+      "state": "Finished",
+      "projectId": 4
+    },
+    {
+      "id": 9,
+      "name": "Kod",
+      "state": "In progress",
+      "projectId": 6
+    }
+  ]
 }

@@ -48,6 +48,10 @@ input {
     border: 1px solid var(--dirtyWhiteColor);
 }
 
+.labelBlack {
+    color: black;
+}
+
 .statusIcon {
     width: 20px;
     height: 20px;

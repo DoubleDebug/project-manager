@@ -1,6 +1,5 @@
 import { DatabaseAPI } from '../utils/databaseAPI';
 import { ManagerModel } from '../manager/model';
-import { ManagerView } from '../manager/view';
 import { Task } from '../task/controller';
 import { TaskState } from '../utils/taskState';
 import { Project } from './controller';
@@ -619,10 +618,7 @@ export class ProjectView {
                 user.getId()
             );
             // add tasks to database
-            const taskResponse = DatabaseAPI.addTasks(
-                model.getTasks(),
-                projResponse.id
-            );
+            DatabaseAPI.addTasks(model.getTasks(), projResponse.id);
 
             // add project to model
             const newProject = new Project(

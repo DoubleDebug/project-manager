@@ -1,6 +1,4 @@
 import { Project } from '../project/controller';
-import { Task } from '../task/controller';
-import { TaskState } from '../utils/taskState';
 
 export class UserModel {
     private id: number;
