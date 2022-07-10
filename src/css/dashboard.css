@@ -161,7 +161,7 @@
   }
 }
 
-@media only screen and (max-width: 801px) {
+@media only screen and (max-width: 799px) {
   #btnAction,
   #btnSortDropdown,
   #btnFilterDropdown {

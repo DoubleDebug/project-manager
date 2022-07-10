@@ -287,7 +287,7 @@ export class ManagerView {
 
     // Project Manager label (top left)
     const title = document.createElement('a');
-    title.href = '/src/index.html';
+    title.href = '/';
     title.className = 'headerTitle';
     title.innerHTML = 'Project Manager';
     header.appendChild(title);
