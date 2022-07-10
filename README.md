@@ -1,21 +1,25 @@
-# project-manager
+# Project manager
 
-TypeScript web app for project management
+TypeScript web app for project management, progress tracking and to do lists.
 
----
+# Live demo
 
-- klase ✓
+See the live demo [here](https://doubledebug.github.io/project-manager/).
+
+# Features
+
+- ES6 Classes ✓
+- ES6 Modules ✓
 - Babel ✓
-- moduli ✓
 - Webpack ✓
-- funkcionalno programiranje i rad sa nizovima
+- Functional programming & working with arrays
   - map ✓
   - reduce ✓
   - filter ✓
   - forEach ✓
-- asinhrono programiranje
+- Asynchronous programming
   - fetch ✓
-  - Promise ✓
+  - promises ✓
 - RxJS
   - switchMap ✓
   - take ✓
