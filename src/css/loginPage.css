@@ -56,7 +56,7 @@
 }
 
 .imgStartPage {
-  content: url('../../res/projectCard6.svg');
+  content: url('../../assets/projectCard6.svg');
   align-self: center;
   width: 320px;
   aspect-ratio: 505 / 596;
