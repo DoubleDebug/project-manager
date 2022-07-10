@@ -2,74 +2,69 @@
   "users": [
     {
       "id": 1,
-      "nickname": "DoubleDebug",
-      "password": "pswd123"
+      "nickname": "test",
+      "password": "test123"
     },
     {
       "id": 2,
-      "nickname": "JohnSnow",
-      "password": "pswd321"
+      "nickname": "john",
+      "password": "john321"
     },
     {
-      "nickname": "asdf",
-      "password": "asdf",
+      "nickname": "nick",
+      "password": "nick123",
       "id": 3
-    },
-    {
-      "nickname": "miki",
-      "password": "miki",
-      "id": 4
     }
   ],
   "projects": [
     {
       "id": 1,
-      "name": "RWA",
-      "dueDate": "2021-07-10T00:00:00.000Z",
+      "name": "Math (homework)",
+      "dueDate": "2023-07-10T00:00:00.000Z",
       "timestamp": "2021-06-01T00:00:00",
       "userId": 1
     },
     {
       "id": 2,
-      "name": "SWE",
-      "dueDate": "2021-07-20T00:00:00",
+      "name": "Physics",
+      "dueDate": "2023-07-20T00:00:00.000Z",
       "timestamp": "2021-06-02T00:00:00",
       "userId": 1
     },
     {
       "id": 3,
-      "name": "Digitalna elektronika",
-      "dueDate": "2021-10-14T22:00:00.000Z",
+      "name": "Computer science",
+      "dueDate": "2023-10-14T22:00:00.000Z",
       "timestamp": "2021-06-03T00:00:00",
       "userId": 1
     },
     {
       "id": 4,
-      "name": "Objektno orijentisano programiranje",
-      "dueDate": "2021-09-01T00:00:00",
+      "name": "Shopping to-do list",
+      "dueDate": "2023-09-01T00:00:00",
       "timestamp": "2021-06-04T00:00:00",
       "userId": 1
     },
     {
       "id": 5,
-      "name": "OOP",
-      "dueDate": "2021-07-01T00:00:00",
+      "name": "Presents to buy",
+      "dueDate": "2021-07-01T00:00:00.000Z",
       "timestamp": "2021-06-27T00:00:00",
       "userId": 1
     },
     {
       "id": 6,
-      "name": "Racunarska grafika",
-      "dueDate": "2021-08-01T00:00:00",
+      "name": "Biology",
+      "dueDate": "2023-08-01T00:00:00",
       "timestamp": "2021-06-27T00:00:00",
       "userId": 2
     },
     {
-      "name": "Dusan",
-      "dueDate": "2021-07-12T00:00:00.000Z",
-      "timestamp": "2021-07-11T18:54:47.012Z",
-      "userId": "4",
-      "id": 7
+      "id": 7,
+      "name": "Psychology",
+      "dueDate": "2023-08-01T00:00:00",
+      "timestamp": "2021-06-27T00:00:00",
+      "userId": 2
     }
   ],
   "tasks": [
@@ -77,49 +72,97 @@
       "id": 2,
       "name": "Webpack",
       "state": "To do",
-      "projectId": 1
+      "projectId": 3
     },
     {
       "id": 3,
       "name": "Classes",
       "state": "To do",
-      "projectId": 1
+      "projectId": 3
     },
     {
       "id": 4,
       "name": "Documentation",
       "state": "Finished",
-      "projectId": 2
+      "projectId": 3
     },
     {
       "id": 5,
-      "name": "Kod",
+      "name": "Code",
       "state": "To do",
-      "projectId": 2
+      "projectId": 3
     },
     {
       "id": 6,
-      "name": "JPA",
+      "name": "Page 63",
       "state": "Finished",
-      "projectId": 4
+      "projectId": 1
     },
     {
       "id": 7,
-      "name": "EJB",
+      "name": "Page 64",
       "state": "In progress",
-      "projectId": 4
+      "projectId": 1
     },
     {
       "id": 8,
-      "name": "Docker",
+      "name": "milk",
       "state": "Finished",
       "projectId": 4
     },
     {
-      "id": 9,
-      "name": "Kod",
-      "state": "In progress",
-      "projectId": 6
+      "name": "page 23",
+      "state": "To do",
+      "projectId": "2",
+      "id": 9
+    },
+    {
+      "name": "page 24",
+      "state": "To do",
+      "projectId": "2",
+      "id": 10
+    },
+    {
+      "name": "page 25",
+      "state": "To do",
+      "projectId": "2",
+      "id": 11
+    },
+    {
+      "name": "eggs",
+      "state": "Finished",
+      "projectId": "4",
+      "id": 12
+    },
+    {
+      "name": "bacon",
+      "state": "Finished",
+      "projectId": "4",
+      "id": 13
+    },
+    {
+      "name": "toilet paper",
+      "state": "To do",
+      "projectId": "4",
+      "id": 14
+    },
+    {
+      "name": "for mom",
+      "state": "To do",
+      "projectId": "5",
+      "id": 15
+    },
+    {
+      "name": "for dad",
+      "state": "To do",
+      "projectId": "5",
+      "id": 16
+    },
+    {
+      "name": "for sister",
+      "state": "To do",
+      "projectId": "5",
+      "id": 17
     }
   ]
 }

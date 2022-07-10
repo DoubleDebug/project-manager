@@ -79,6 +79,16 @@ export class ManagerView {
       }, 1000);
     };
     btnContainer.appendChild(btnLogin);
+
+    const iconInfo = document.createElement('i');
+    iconInfo.id = 'iconInfo';
+    iconInfo.className = 'fas fa-info-circle fa-lg';
+    iconInfo.dataset.shown = 'no';
+    iconInfo.onclick = () => {
+      iconInfo.dataset.shown = iconInfo.dataset.shown === 'yes' ? 'no' : 'yes';
+    };
+
+    btnContainer.appendChild(iconInfo);
     loginContainer.appendChild(btnContainer);
 
     // draw login and sing up forms

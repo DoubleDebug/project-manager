@@ -74,7 +74,7 @@
 }
 
 .imgEmptyDashboard {
-  content: url('../../res/emptyDashboard.svg');
+  content: url('../../assets/emptyDashboard.svg');
   width: 350px;
   aspect-ratio: 1009 / 789;
 }
