@@ -4,12 +4,11 @@
     "description": "TypeScript web app for project management",
     "main": "main.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "build": "webpack",
         "watch": "webpack --watch",
         "babel": "./node_modules/.bin/babel src --out-dir lib --extensions \".ts\"",
-        "json": "json-server --watch ./data/db.json",
-        "jsonDelay": "json-server --watch ./data/db.json --delay 2000"
+        "json": "json-server --watch db.json",
+        "jsonDelay": "json-server --watch db.json --delay 2000"
     },
     "author": "DoubleDebug",
     "license": "ISC",
