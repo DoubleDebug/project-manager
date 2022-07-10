@@ -155,8 +155,13 @@
   color: silver;
 }
 
-@media only screen and (max-width: 1000px) {
-  #searchInputGroup,
+@media only screen and (max-width: 1200px) {
+  #searchInputGroup {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 801px) {
   #btnAction,
   #btnSortDropdown,
   #btnFilterDropdown {
