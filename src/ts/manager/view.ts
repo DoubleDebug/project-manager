@@ -11,6 +11,8 @@ import { displayModal } from '../utils/modal';
 import { from, fromEvent } from 'rxjs';
 import { filter, map, switchMap, tap, take, mergeWith } from 'rxjs/operators';
 
+const BASE_URL = 'https://doubledebug.github.io/project-manager/';
+
 export class ManagerView {
   private parent: HTMLElement;
   private container: HTMLElement;
@@ -287,7 +289,7 @@ export class ManagerView {
 
     // Project Manager label (top left)
     const title = document.createElement('a');
-    title.href = '/';
+    title.href = BASE_URL;
     title.className = 'headerTitle';
     title.innerHTML = 'Project Manager';
     header.appendChild(title);

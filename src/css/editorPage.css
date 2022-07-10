@@ -10,7 +10,7 @@ hr {
   border-radius: 0.25rem;
   justify-self: center;
   align-self: center;
-  width: clamp(500px, 60%, 1000px);
+  width: clamp(600px, 60%, 1000px);
   height: max-content;
   box-shadow: 7px 7px rgb(255 255 255 / 30%);
 }
